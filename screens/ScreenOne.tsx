@@ -15,12 +15,7 @@ export default function ScreenOne({ navigation }: RootStackScreenProps<'ScreenOn
         <Text>Go to Screen Two!</Text>
       </TouchableOpacity>
       <EditScreenInfo />
-      <Button type="roundedWhite" label="Watch Tutorial" />
       <Button type="roundedBlue" label="Watch Tutorial" />
-      <Button type="skinnyWhite" label="Watch Tutorial" />
-      <Button type="skinnyBlue" label="Watch Tutorial" />
-      <Button type="borderedWhite" label="Watch Tutorial" />
-      <Button type="faded" label="Watch Tutorial" />
     </Container>
   );
 }
