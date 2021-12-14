@@ -10,7 +10,7 @@ import Button from '../components/reusable-components/Button';
 export default function ScreenOne({ navigation }: RootStackScreenProps<'ScreenOne'>) {
   return (
     <Container>
-      <Text>Screen One</Text>
+      <Text>Screen One bla</Text>
       <TouchableOpacity onPress={() => navigation.push('ScreenTwo')}>
         <Text>Go to Screen Two!</Text>
       </TouchableOpacity>
