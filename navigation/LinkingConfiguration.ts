@@ -16,6 +16,9 @@ const linking: LinkingOptions<RootStackParamList> = {
       ScreenTwo: 'two',
       Modal: 'modal',
       NotFound: '*',
+      CodeScreen: 'code',
+      NameScreen: 'name',
+      ImageScreen: 'image',
     },
   },
 };

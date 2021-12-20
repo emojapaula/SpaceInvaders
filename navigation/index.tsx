@@ -12,6 +12,9 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import ScreenOne from '../screens/ScreenOne';
 import ScreenTwo from '../screens/ScreenTwo';
 import LinkingConfiguration from './LinkingConfiguration';
+import CodeScreen from '../screens/login/CodeScreen';
+import NameScreen from '../screens/login/NameScreen';
+import ImageScreen from '../screens/login/ImageScreen';
 import { RootStackParamList } from './root-navigator';
 
 export default function Navigation() {
@@ -29,16 +32,18 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const screenOptionStyle = {
+    /* headerBackVisible: false,
+    headerShadowVisible: false,
+    headerTitleAlign: 'center', */
+    headerShown: false,
+  };
   return (
-    <Stack.Navigator
-      screenOptions={{
-        contentStyle: {
-          backgroundColor: '#FFFFFF',
-        },
-      }}
-      initialRouteName="ScreenOne"
-    >
+    <Stack.Navigator screenOptions={screenOptionStyle as {}} initialRouteName="ScreenOne">
       <Stack.Screen name="ScreenOne" component={ScreenOne} />
+      <Stack.Screen name="CodeScreen" component={CodeScreen} />
+      <Stack.Screen name="NameScreen" component={NameScreen} />
+      <Stack.Screen name="ImageScreen" component={ImageScreen} />
       <Stack.Screen name="ScreenTwo" component={ScreenTwo} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>

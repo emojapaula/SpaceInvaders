@@ -6,6 +6,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 const Wrapper = styled(View)`
   width: ${wp('90%')}px;
   margin: 0 auto;
+  height: 100%;
 `;
 
 const OuterContainer = styled(View)``;

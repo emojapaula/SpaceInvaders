@@ -5,6 +5,9 @@ export type RootStackParamList = {
   ScreenTwo: undefined;
   Modal: undefined;
   NotFound: undefined;
+  CodeScreen: undefined;
+  NameScreen: undefined;
+  ImageScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
