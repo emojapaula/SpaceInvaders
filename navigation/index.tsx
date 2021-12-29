@@ -7,17 +7,22 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ScreenOne from '../screens/ScreenOne';
+import { useAuth } from '../auth/authContext';
 import ScreenTwo from '../screens/ScreenTwo';
 import LinkingConfiguration from './LinkingConfiguration';
 import CodeScreen from '../screens/login/CodeScreen';
 import NameScreen from '../screens/login/NameScreen';
 import ImageScreen from '../screens/login/ImageScreen';
 import { RootStackParamList } from './root-navigator';
+import GameScreen from '../screens/GameScreen';
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function Navigation() {
+  const { authData } = useAuth();
+
   return (
     <NavigationContainer linking={LinkingConfiguration}>
       <RootNavigator />
@@ -25,30 +30,28 @@ export default function Navigation() {
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const screenOptionStyle = {
+  headerShown: false,
+};
 
-function RootNavigator() {
-  const screenOptionStyle = {
-    /* headerBackVisible: false,
-    headerShadowVisible: false,
-    headerTitleAlign: 'center', */
-    headerShown: false,
-  };
+const RootNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle as {}} initialRouteName="ScreenOne">
-      <Stack.Screen name="ScreenOne" component={ScreenOne} />
       <Stack.Screen name="CodeScreen" component={CodeScreen} />
+      <Stack.Screen name="ScreenOne" component={ScreenOne} />
       <Stack.Screen name="NameScreen" component={NameScreen} />
       <Stack.Screen name="ImageScreen" component={ImageScreen} />
+      <Stack.Screen name="GameScreen" component={GameScreen} />
       <Stack.Screen name="ScreenTwo" component={ScreenTwo} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
     </Stack.Navigator>
   );
-}
+};
+
+const AuthStack = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle as {}}>
+      <Stack.Screen name="CodeScreen" component={CodeScreen} />
+    </Stack.Navigator>
+  );
+};

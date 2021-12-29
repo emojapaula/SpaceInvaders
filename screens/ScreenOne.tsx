@@ -10,9 +10,10 @@ export default function ScreenOne({ navigation }: RootStackScreenProps<'ScreenOn
   return (
     <Container>
       <Text>Screen One bla</Text>
-      <TouchableOpacity onPress={() => navigation.push('ScreenTwo')}>
-        <Text>Go to Screen Two!</Text>
+      <TouchableOpacity onPress={() => navigation.push('GameScreen')}>
+        <Text>Go to Game Screen</Text>
       </TouchableOpacity>
+      <Button onPress={() => navigation.push('GameScreen')} type="secondary" label="Go Game Screen" />
       <Text>Go to Login!</Text>
 
       <Button onPress={() => navigation.push('CodeScreen')} type="secondary" label="Go to login" />

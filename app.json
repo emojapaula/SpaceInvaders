@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "application-smart-sensor-mobile",
-    "slug": "application-smart-sensor-mobile",
+    "name": "Space-Invaders",
+    "slug": "Space-Invaders",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

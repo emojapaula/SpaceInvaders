@@ -6,7 +6,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { BUTTON_TYPE } from '../../constants/Constants';
 
 interface IButton {
-  label?: string;
+  label?: string | number;
   type: BUTTON_TYPE;
   onPress: () => any;
   backgroundColor?: string;

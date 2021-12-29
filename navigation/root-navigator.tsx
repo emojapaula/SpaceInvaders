@@ -8,6 +8,7 @@ export type RootStackParamList = {
   CodeScreen: undefined;
   NameScreen: undefined;
   ImageScreen: undefined;
+  GameScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
