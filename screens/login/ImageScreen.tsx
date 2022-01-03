@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, TouchableOpacity, View ,Image,StyleSheet} from 'react-native';
 import Container from '../../components/layout/Container';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useAuth } from '../../auth/authContext';
 import AnimalCard from '../../components/AnimalCard';
-
 const ImagesContainer = styled(View)`
   display: flex;
   flex-direction: row;
@@ -61,14 +60,15 @@ export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageS
     <Container>
       <Text>Image blaa</Text>
       <>
-        <FlatList
+      <FlatList
+          style={styles.container}
           data={emojis}
           renderItem={renderItem}
           keyExtractor={(item) => item}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           numColumns={5}
-        />
+        /> 
         {/*   <ImagesContainer>
           <ImageContainer onPress={() => chooseImage(animalsIcons.panda.name)}>
             <animalsIcons.panda.panda />
@@ -139,3 +139,10 @@ export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageS
     </Container>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop:"50%",
+    marginLeft:20
+  }
+});
