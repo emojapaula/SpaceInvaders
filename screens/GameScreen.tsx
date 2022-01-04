@@ -99,14 +99,16 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop:50,
     borderWidth: 1,
+    backgroundColor:"#000"
   },
   item: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
     margin: 1,
-    //height: Dimensions.get('window').width / numColumns,
+    height: Dimensions.get('window').width / numColumns,
     borderWidth: 1,
+    backgroundColor:"#fff"
   },
   buttoncontainer:{
     flexDirection:"row",
