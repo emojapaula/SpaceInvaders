@@ -10,6 +10,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { theme } from '../../constants/Theme';
 import { useState } from 'react';
 import { useAuth } from '../../auth/authContext';
+import { Header } from '../../components/reusable-components/Header';
 
 const StyledScrollView = styled(FlatList)`
   overflow: visible;
@@ -26,11 +27,18 @@ export default function NameScreen({ navigation }: RootStackScreenProps<'NameScr
   const { students } = useStudentsData();
   const { chooseName } = useAuth();
   // const [student, setStudent] = useState('');
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <Header label="Find your name" wizard={{ step: 1, totalSteps: 2 }} />,
+    });
+  }, [navigation]);
+
   const renderItem = ({ item }: any) => (
     <NameCard
       onPress={() => {
         chooseName(item.studentId);
-        navigation.navigate('ImageScreen');
+        navigation.navigate('ImageScreen', { student: item.name });
       }}
     >
       <Text fontSize={hp('3%')} lineHeight={hp('6%')} textAlign="center" color={theme.palette.chinaRose}>

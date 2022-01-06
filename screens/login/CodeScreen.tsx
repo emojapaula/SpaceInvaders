@@ -27,6 +27,12 @@ const InputContainer = styled(View)`
 `;
 
 export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScreen'>) {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
+
   const [classCode, setClassCode] = useState('');
   const [valid, setValid] = React.useState(true);
   //TODO change class to grade because of consistency

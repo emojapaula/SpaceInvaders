@@ -12,6 +12,7 @@ type AuthContextData = {
   signOut(): void;
   chooseName: (id: string) => void;
   chooseImage: (picture: string) => void;
+  student: IStudent;
 };
 
 export type AuthData = {
@@ -26,9 +27,9 @@ but it indicates a memory leak in your application.
 export const AuthProvider: React.FC = ({ children }) => {
   const [authData, setAuthData] = useState<AuthData>();
   const [loading, setLoading] = useState(true);
-  const [students, setStudents] = useState<IStudent[]>([]);
   const [studentId, setStudentId] = useState('');
   const [image, setImage] = useState('');
+  const [student, setStudent] = useState<IStudent>({ name: '', surname: '', studentId: '' });
 
   useEffect(() => {
     loadStorageData();
@@ -37,7 +38,6 @@ export const AuthProvider: React.FC = ({ children }) => {
   const chooseName = (id: string) => {
     console.log('id', id);
     setStudentId(id);
-    console.log('object');
   };
 
   const chooseImage = (image: string) => {
@@ -59,7 +59,6 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   const signIn = async () => {
-    console.log(studentId, image);
     return AxiosInstance.post('/login', {
       studentId: studentId,
       pictureKey: image,
@@ -67,10 +66,13 @@ export const AuthProvider: React.FC = ({ children }) => {
       .then((res) => {
         const { data: _authData } = res;
         console.log('data', res.data);
-        setStudents(res.data);
 
         setAuthData(_authData);
         AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
+        const name = res.data.name;
+        const surname = res.data.surname;
+        const studentId = res.data.studentId;
+        setStudent({ name, surname, studentId });
 
         return _authData;
       })
@@ -83,8 +85,9 @@ export const AuthProvider: React.FC = ({ children }) => {
     setAuthData(undefined);
     await AsyncStorage.removeItem('@AuthData');
   };
+
   return (
-    <AuthContext.Provider value={{ authData, loading, signIn, signOut, chooseName, chooseImage }}>
+    <AuthContext.Provider value={{ student, authData, loading, signIn, signOut, chooseName, chooseImage }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useAuth } from '../../auth/authContext';
 import AnimalCard from '../../components/AnimalCard';
+import { Header } from '../../components/reusable-components/Header';
 
 const ImagesContainer = styled(View)`
   display: flex;
@@ -50,16 +51,20 @@ const emojis: string[] = [
   'giraffe_face',
 ];
 
-export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageScreen'>) {
+export default function ImageScreen({ navigation, route }: RootStackScreenProps<'ImageScreen'>) {
   const { chooseImage, signIn } = useAuth();
+  const { student } = route.params;
 
-  /* const renderItem = ({ item }: any) => {
-    <AnimalCard animal={item} />;
-  }; */
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <Header label="Select your animal" wizard={{ step: 2, totalSteps: 2 }} />,
+    });
+  }, [navigation]);
+
   const renderItem = ({ item }: { item: string }) => <AnimalCard animal={item} />;
   return (
     <Container>
-      <Text>Image blaa</Text>
+      <Text>Hello {student}</Text>
       <>
         <FlatList
           data={emojis}
@@ -69,69 +74,11 @@ export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageS
           showsVerticalScrollIndicator={false}
           numColumns={5}
         />
-        {/*   <ImagesContainer>
-          <ImageContainer onPress={() => chooseImage(animalsIcons.panda.name)}>
-            <animalsIcons.panda.panda />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.butterfly.butterfly />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.chick.chick />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.crocodile.crocodile />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.dog.dog />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.fox.fox />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.ladybug.ladybug />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.lion.lion />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.monkey.monkey />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.mouse.mouse />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.octopus.octopus />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.penguin.penguin />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.rhino.rhino />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.snail.snail />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.snake.snake />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.tiger.tiger />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.turtle.turtle />
-          </ImageContainer>
-          <ImageContainer>
-            <animalsIcons.bird.bird />
-          </ImageContainer>
-        </ImagesContainer>  */}
       </>
 
-      {/* <StyledScrollView data={images} renderItem={renderItem} numColumns={5} /> */}
       <Button
         onPress={() => {
           signIn();
-          console.log('object');
         }}
         type="secondary"
         label="Log In "

@@ -7,6 +7,7 @@ import { RootStackScreenProps } from '../navigation/root-navigator';
 import Button from '../components/reusable-components/Button';
 import MonsterCard from '../components/MonsterCard';
 import { useState } from 'react';
+import styled from 'styled-components';
 
 const monsters: string[] = ['space_invader', 'poop', 'japanese_ogre', 'skull', 'ghost'];
 
@@ -15,6 +16,12 @@ interface IDice {
   number: number;
   disabled: boolean;
 }
+
+const ButtonContainer = styled(View)`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+`;
 
 export default function GameScreen({ navigation }: RootStackScreenProps<'GameScreen'>) {
   const getRandom = (min: number, max: number) => {
@@ -25,6 +32,36 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [firstDice, setFirstDice] = useState<IDice>({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
   const [secondDice, setSecondDice] = useState<IDice>({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
   const [thirdDice, setThirdDice] = useState<IDice>({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
+  // const [board, setBoard] = useState<String[]>([]);
+
+  const initializeBoard = () => {
+    //napravi polje sa velicinom 1
+    let gameBoard: string[] = ['0'];
+
+    //dodaj 63 nule da polje bude 64
+    for (let i = 0; i < 63; ++i) {
+      gameBoard.push('0');
+    }
+
+    //inicijaliziraj 10 cudovista (oznake cudovista 1,2,3,4) u prva 3 reda
+    for (let i = 0; i < 10; ++i) {
+      let position = Math.floor(Math.random() * 24);
+      let monster = Math.floor(1 + Math.random() * 4);
+      if (gameBoard[position] === '0') {
+        gameBoard[position] = monster.toString();
+      } else {
+        --i;
+      }
+    }
+
+    //inicijaliziraj jednog nekog u 4. red 🙂
+    let pozicija = 24 + Math.floor(Math.random() * 8);
+    gameBoard[pozicija] = Math.floor(1 + Math.random() * 4).toString();
+
+    return gameBoard;
+  };
+
+  let gameBoard = initializeBoard();
 
   const appendNumber = (dice: IDice) => {
     let tempString = expression.concat(dice.number.toString());
@@ -57,6 +94,22 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       setThirdDice({ ...thirdDice, disabled: false });
   };
 
+  const evaluate = () => {
+    // eslint-disable-next-line no-eval
+    const solution = eval(expression.split('x').join('*'));
+    shoot(solution);
+  };
+
+  function shoot(stupac: number) {
+    for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
+      if (gameBoard[i] !== '0') {
+        gameBoard[i] = '0';
+        return true;
+      }
+    }
+    return false;
+  }
+
   const renderItem = ({ item }: { item: string }) => <MonsterCard monster={item} />;
 
   return (
@@ -74,15 +127,20 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
         <Text>{expression}</Text>
       </View>
       <Text>Dostupni brojevi:</Text>
-      <Button type="primary" label={firstDice.number} onPress={() => appendNumber(firstDice)} />
-      <Button type="primary" label={secondDice.number} onPress={() => appendNumber(secondDice)} />
-      <Button type="primary" label={thirdDice.number} onPress={() => appendNumber(thirdDice)} />
-      <Button type="primary" label="+" onPress={() => appendOperator('+')} />
-      <Button type="primary" label="-" onPress={() => appendOperator('-')} />
-      <Button type="primary" label="x" onPress={() => appendOperator('x')} />
-      <Button type="primary" label="/" onPress={() => appendOperator('/')} />
+      <ButtonContainer>
+        <Button type="primary" label={firstDice.number} onPress={() => appendNumber(firstDice)} width="30%" />
+        <Button type="primary" label={secondDice.number} onPress={() => appendNumber(secondDice)} width="30%" />
+        <Button type="primary" label={thirdDice.number} onPress={() => appendNumber(thirdDice)} width="30%" />
+      </ButtonContainer>
+      <ButtonContainer>
+        <Button type="primary" label="+" onPress={() => appendOperator('+')} width="20%" />
+        <Button type="primary" label="-" onPress={() => appendOperator('-')} width="20%" />
+        <Button type="primary" label="x" onPress={() => appendOperator('x')} width="20%" />
+        <Button type="primary" label="/" onPress={() => appendOperator('/')} width="20%" />
+      </ButtonContainer>
       <Button type="primary" label="Briši" onPress={() => removeNumber()} />
-      <Button onPress={() => navigation.push('ScreenOne')} type="secondary" label="Go back" />
+      <Button type="primary" label="Pucaj" onPress={() => evaluate()} />
+      <Button onPress={() => navigation.push('ScreenOne')} type="ternary" label="Go back" />
     </Container>
   );
 }

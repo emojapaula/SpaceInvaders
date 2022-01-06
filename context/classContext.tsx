@@ -24,7 +24,6 @@ interface IStudentProvider {
 const initialStudentData: IStudentContext = {
   students: [],
   teacherName: '',
-  /*classId: 0, */
 };
 
 interface IStudentData extends IStudentContext, IStudentMethods {}

@@ -17,6 +17,10 @@ import NameScreen from '../screens/login/NameScreen';
 import ImageScreen from '../screens/login/ImageScreen';
 import { RootStackParamList } from './root-navigator';
 import GameScreen from '../screens/GameScreen';
+import { HomeScreen } from '../screens/HomeScreen';
+import { theme } from '../constants/Theme';
+import { Header } from 'react-native/Libraries/NewAppScreen';
+import { GoBack } from '../components/reusable-components/Header';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -25,22 +29,31 @@ export default function Navigation() {
 
   return (
     <NavigationContainer linking={LinkingConfiguration}>
-      <RootNavigator />
+      {authData?.token ? <AppStack /> : <AuthStack />}
+      {/* <RootNavigator /> */}
     </NavigationContainer>
   );
 }
 
 const screenOptionStyle = {
-  headerShown: false,
+  headerStyle: {
+    backgroundColor: theme.palette.white,
+  },
+  contentStyle: {
+    backgroundColor: theme.palette.white,
+  },
+  headerBackVisible: false,
+  headerShadowVisible: false,
+  headerTitleAlign: 'center',
+  // headerTitle: ({ children }: { children: string }) => <Header label={children} />,
+  headerLeft: () => <GoBack />,
 };
 
-const RootNavigator = () => {
+const AppStack = () => {
   return (
-    <Stack.Navigator screenOptions={screenOptionStyle as {}} initialRouteName="ScreenOne">
-      <Stack.Screen name="CodeScreen" component={CodeScreen} />
+    <Stack.Navigator screenOptions={screenOptionStyle as {}} initialRouteName="HomeScreen">
       <Stack.Screen name="ScreenOne" component={ScreenOne} />
-      <Stack.Screen name="NameScreen" component={NameScreen} />
-      <Stack.Screen name="ImageScreen" component={ImageScreen} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="GameScreen" component={GameScreen} />
       <Stack.Screen name="ScreenTwo" component={ScreenTwo} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
@@ -52,6 +65,8 @@ const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle as {}}>
       <Stack.Screen name="CodeScreen" component={CodeScreen} />
+      <Stack.Screen name="NameScreen" component={NameScreen} />
+      <Stack.Screen name="ImageScreen" component={ImageScreen} />
     </Stack.Navigator>
   );
 };

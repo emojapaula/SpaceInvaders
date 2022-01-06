@@ -14,6 +14,7 @@ const linking: LinkingOptions<RootStackParamList> = {
       NameScreen: 'name',
       ImageScreen: 'image',
       GameScreen: 'game',
+      HomeScreen: 'welcome',
     },
   },
 };
