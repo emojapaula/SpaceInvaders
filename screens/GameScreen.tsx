@@ -1,15 +1,24 @@
 import * as React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, Text } from 'react-native';
 
 import Container from '../components/layout/Container';
-import { Text } from '../components/reusable-components/Text';
+//import { Text } from '../components/reusable-components/Text';
 import { RootStackScreenProps } from '../navigation/root-navigator';
 import Button from '../components/reusable-components/Button';
 import MonsterCard from '../components/MonsterCard';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const monsters: string[] = ['space_invader', 'poop', 'japanese_ogre', 'skull', 'ghost'];
+const monsters: string[] = [
+  'space_invader',
+  'skull_and_crossbones',
+  'japanese_ogre',
+  'skull',
+  'ghost',
+  'smiling_imp',
+  'japanese_goblin',
+  'alien',
+];
 
 interface IDice {
   name: string;
@@ -120,12 +129,27 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
         keyExtractor={(item) => item}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        horizontal={true}
+        numColumns={8}
       />
-
-      <View>
-        <Text>{expression}</Text>
+      {/* <View>
+        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{expression}</Text>
       </View>
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-evenly' }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Dostupni brojevi:</Text>
+        {/* <View style={styles.buttoncontainer}>
+      <TouchableHighlight  style={styles.number_button} onPress={() => appendNumber(firstDice)} ><Text style={styles.button_text}>{firstDice.number}</Text></TouchableHighlight>
+      <TouchableHighlight  style={styles.number_button} onPress={() => appendNumber(secondDice)} ><Text style={styles.button_text}>{secondDice.number}</Text></TouchableHighlight>
+      <TouchableHighlight  style={styles.number_button}onPress={() => appendNumber(thirdDice)} ><Text style={styles.button_text}>{thirdDice.number}</Text></TouchableHighlight>
+      </View>
+      <View style={styles.buttoncontainer}>
+      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('+')}><Text style={styles.button_text}>+</Text></TouchableHighlight>
+      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('-')}><Text style={styles.button_text}>-</Text></TouchableHighlight>
+      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('x')}><Text style={styles.button_text}>x</Text></TouchableHighlight>
+      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('/')}><Text style={styles.button_text}>/</Text></TouchableHighlight>
+      <TouchableHighlight  style={styles.operator_button} onPress={removeNumber}><Text style={styles.button_text}>Briši</Text></TouchableHighlight>
+      </View> *
+        <Button onPress={() => navigation.push('ScreenOne')} type="secondary" label="Vrati se nazad" />
+      </View> */}
       <Text>Dostupni brojevi:</Text>
       <ButtonContainer>
         <Button type="primary" label={firstDice.number} onPress={() => appendNumber(firstDice)} width="30%" />
@@ -144,3 +168,47 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     </Container>
   );
 }
+/* const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 50,
+    borderWidth: 1,
+    backgroundColor: '#000',
+  },
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 1,
+    height: Dimensions.get('window').width / numColumns,
+    borderWidth: 1,
+    backgroundColor: '#fff',
+  },
+  buttoncontainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginBottom: 10,
+  },
+  number_button: {
+    width: 90,
+    height: 40,
+    backgroundColor: '#35bd59',
+    borderRadius: 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  operator_button: {
+    width: 70,
+    height: 40,
+    backgroundColor: '#a827cf',
+    borderRadius: 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button_text: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+});
+ */

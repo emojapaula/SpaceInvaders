@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
 import Container from '../../components/layout/Container';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
@@ -67,6 +67,7 @@ export default function ImageScreen({ navigation, route }: RootStackScreenProps<
       <Text>Hello {student}</Text>
       <>
         <FlatList
+          style={styles.container}
           data={emojis}
           renderItem={renderItem}
           keyExtractor={(item) => item}
@@ -86,3 +87,10 @@ export default function ImageScreen({ navigation, route }: RootStackScreenProps<
     </Container>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: '50%',
+    marginLeft: 20,
+  },
+});
