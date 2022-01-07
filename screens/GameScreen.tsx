@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, StatusBar } from 'react-native';
 
 import Container from '../components/layout/Container';
 //import { Text } from '../components/reusable-components/Text';
@@ -8,6 +8,7 @@ import Button from '../components/reusable-components/Button';
 import MonsterCard from '../components/MonsterCard';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Board } from '../components/Board';
 
 const monsters: string[] = [
   'space_invader',
@@ -33,6 +34,11 @@ const ButtonContainer = styled(View)`
 `;
 
 export default function GameScreen({ navigation }: RootStackScreenProps<'GameScreen'>) {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
   const getRandom = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min) + min);
   };
@@ -42,30 +48,29 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [secondDice, setSecondDice] = useState<IDice>({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
   const [thirdDice, setThirdDice] = useState<IDice>({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
   // const [board, setBoard] = useState<String[]>([]);
+  const [solution, setSolution] = useState(0);
 
   const initializeBoard = () => {
     //napravi polje sa velicinom 1
     let gameBoard: string[] = ['0'];
-
     //dodaj 63 nule da polje bude 64
     for (let i = 0; i < 63; ++i) {
       gameBoard.push('0');
     }
-
     //inicijaliziraj 10 cudovista (oznake cudovista 1,2,3,4) u prva 3 reda
     for (let i = 0; i < 10; ++i) {
       let position = Math.floor(Math.random() * 24);
-      let monster = Math.floor(1 + Math.random() * 4);
+      let monster = Math.floor(Math.random() * 8);
       if (gameBoard[position] === '0') {
-        gameBoard[position] = monster.toString();
+        // gameBoard[position] = monster.toString();
+        gameBoard[position] = monsters[monster];
       } else {
         --i;
       }
     }
-
     //inicijaliziraj jednog nekog u 4. red 🙂
     let pozicija = 24 + Math.floor(Math.random() * 8);
-    gameBoard[pozicija] = Math.floor(1 + Math.random() * 4).toString();
+    gameBoard[pozicija] = monsters[Math.floor(Math.random() * 8)];
 
     return gameBoard;
   };
@@ -105,11 +110,12 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
 
   const evaluate = () => {
     // eslint-disable-next-line no-eval
-    const solution = eval(expression.split('x').join('*'));
+    setSolution(eval(expression.split('x').join('*')));
     shoot(solution);
   };
 
   function shoot(stupac: number) {
+    if (stupac < 1 || stupac > 8) return false;
     for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
       if (gameBoard[i] !== '0') {
         gameBoard[i] = '0';
@@ -119,18 +125,39 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     return false;
   }
 
+  function moveDown() {
+    for (let i = 56; i < 64; ++i) {
+      if (gameBoard[i] !== '0') {
+        return true;
+      }
+    }
+
+    for (let i = 63; i >= 8; --i) {
+      gameBoard[i] = gameBoard[i - 8];
+    }
+    //BUG
+    for (let i = 0; i < 8; ++i) {
+      gameBoard[i] = '0';
+    }
+    return false;
+  }
+
   const renderItem = ({ item }: { item: string }) => <MonsterCard monster={item} />;
+  console.log(gameBoard);
 
   return (
-    <Container>
-      <FlatList
-        data={monsters}
+    <View>
+      <StatusBar hidden />
+      {/* <FlatList
+        data={gameBoard}
         renderItem={renderItem}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item + Math.random()}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        numColumns={8}
-      />
+        horizontal={true}
+      /> */}
+      <Board first={gameBoard} />
+
       {/* <View>
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{expression}</Text>
       </View>
@@ -150,6 +177,8 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       </View> *
         <Button onPress={() => navigation.push('ScreenOne')} type="secondary" label="Vrati se nazad" />
       </View> */}
+      <Text>{expression}</Text>
+      <Text>{solution}</Text>
       <Text>Dostupni brojevi:</Text>
       <ButtonContainer>
         <Button type="primary" label={firstDice.number} onPress={() => appendNumber(firstDice)} width="30%" />
@@ -165,7 +194,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       <Button type="primary" label="Briši" onPress={() => removeNumber()} />
       <Button type="primary" label="Pucaj" onPress={() => evaluate()} />
       <Button onPress={() => navigation.push('ScreenOne')} type="ternary" label="Go back" />
-    </Container>
+    </View>
   );
 }
 /* const styles = StyleSheet.create({
