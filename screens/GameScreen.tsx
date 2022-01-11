@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, StatusBar } from 'react-native';
 
 import Container from '../components/layout/Container';
 //import { Text } from '../components/reusable-components/Text';
@@ -8,6 +8,8 @@ import Button from '../components/reusable-components/Button';
 import MonsterCard from '../components/MonsterCard';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Board } from '../components/Board';
+import { useGameData } from '../context/gameContext';
 
 const monsters: string[] = [
   'space_invader',
@@ -33,6 +35,15 @@ const ButtonContainer = styled(View)`
 `;
 
 export default function GameScreen({ navigation }: RootStackScreenProps<'GameScreen'>) {
+  const { moveDown, board, shoot } = useGameData();
+
+  const gameBoard = board;
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
   const getRandom = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min) + min);
   };
@@ -41,36 +52,43 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [firstDice, setFirstDice] = useState<IDice>({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
   const [secondDice, setSecondDice] = useState<IDice>({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
   const [thirdDice, setThirdDice] = useState<IDice>({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
-  // const [board, setBoard] = useState<String[]>([]);
-
+  const [solution, setSolution] = useState(0);
+  const [shootingCounter, setShootingCounter] = useState(0);
+  function useForceUpdate() {
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value + 1); // update the state to force render
+  }
+  const forceUpdate = useForceUpdate();
   const initializeBoard = () => {
     //napravi polje sa velicinom 1
     let gameBoard: string[] = ['0'];
-
     //dodaj 63 nule da polje bude 64
     for (let i = 0; i < 63; ++i) {
       gameBoard.push('0');
     }
-
     //inicijaliziraj 10 cudovista (oznake cudovista 1,2,3,4) u prva 3 reda
     for (let i = 0; i < 10; ++i) {
       let position = Math.floor(Math.random() * 24);
-      let monster = Math.floor(1 + Math.random() * 4);
+      let monster = Math.floor(Math.random() * 8);
       if (gameBoard[position] === '0') {
-        gameBoard[position] = monster.toString();
+        // gameBoard[position] = monster.toString();
+        gameBoard[position] = monsters[monster];
       } else {
         --i;
       }
     }
-
     //inicijaliziraj jednog nekog u 4. red 🙂
     let pozicija = 24 + Math.floor(Math.random() * 8);
-    gameBoard[pozicija] = Math.floor(1 + Math.random() * 4).toString();
+    gameBoard[pozicija] = monsters[Math.floor(Math.random() * 8)];
 
     return gameBoard;
   };
 
-  let gameBoard = initializeBoard();
+  const setDices = () => {
+    setFirstDice({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
+    setSecondDice({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
+    setThirdDice({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
+  };
 
   const appendNumber = (dice: IDice) => {
     let tempString = expression.concat(dice.number.toString());
@@ -105,51 +123,45 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
 
   const evaluate = () => {
     // eslint-disable-next-line no-eval
-    const solution = eval(expression.split('x').join('*'));
-    shoot(solution);
+    setSolution(eval(expression.split('x').join('*')));
+    // eslint-disable-next-line no-eval
+    shoot(eval(expression.split('x').join('*')), expression);
+    setExpression('');
+    setShootingCounter(shootingCounter + 1);
+    if (shootingCounter % 3 === 0 && shootingCounter !== 0) {
+      console.log('bravo', shootingCounter);
+      moveDown();
+      setDices();
+    }
+    forceUpdate();
   };
 
-  function shoot(stupac: number) {
-    for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
-      if (gameBoard[i] !== '0') {
-        gameBoard[i] = '0';
-        return true;
+  /*   function shoot(stupac: number) {
+    console.log('jesam usao');
+    if (stupac > 0 && stupac < 8) {
+      for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
+        if (gameBoard[i] !== '0') {
+          gameBoard[i] = '0';
+        }
       }
     }
-    return false;
-  }
 
-  const renderItem = ({ item }: { item: string }) => <MonsterCard monster={item} />;
+    console.log('prije', shootingCounter);
+
+    setShootingCounter(shootingCounter + 1);
+    console.log('poslije', shootingCounter);
+    if (shootingCounter % 3 === 0) moveDown();
+  } */
 
   return (
-    <Container>
-      <FlatList
-        data={monsters}
-        renderItem={renderItem}
-        keyExtractor={(item) => item}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        numColumns={8}
-      />
-      {/* <View>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{expression}</Text>
-      </View>
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-evenly' }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Dostupni brojevi:</Text>
-        {/* <View style={styles.buttoncontainer}>
-      <TouchableHighlight  style={styles.number_button} onPress={() => appendNumber(firstDice)} ><Text style={styles.button_text}>{firstDice.number}</Text></TouchableHighlight>
-      <TouchableHighlight  style={styles.number_button} onPress={() => appendNumber(secondDice)} ><Text style={styles.button_text}>{secondDice.number}</Text></TouchableHighlight>
-      <TouchableHighlight  style={styles.number_button}onPress={() => appendNumber(thirdDice)} ><Text style={styles.button_text}>{thirdDice.number}</Text></TouchableHighlight>
-      </View>
-      <View style={styles.buttoncontainer}>
-      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('+')}><Text style={styles.button_text}>+</Text></TouchableHighlight>
-      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('-')}><Text style={styles.button_text}>-</Text></TouchableHighlight>
-      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('x')}><Text style={styles.button_text}>x</Text></TouchableHighlight>
-      <TouchableHighlight  style={styles.operator_button} onPress={() => appendOperator('/')}><Text style={styles.button_text}>/</Text></TouchableHighlight>
-      <TouchableHighlight  style={styles.operator_button} onPress={removeNumber}><Text style={styles.button_text}>Briši</Text></TouchableHighlight>
-      </View> *
-        <Button onPress={() => navigation.push('ScreenOne')} type="secondary" label="Vrati se nazad" />
-      </View> */}
+    <View>
+      <StatusBar hidden />
+
+      <Board solution={solution} />
+      <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text>
+
+      <Text>{expression}</Text>
+      <Text>{solution}</Text>
       <Text>Dostupni brojevi:</Text>
       <ButtonContainer>
         <Button type="primary" label={firstDice.number} onPress={() => appendNumber(firstDice)} width="30%" />
@@ -165,50 +177,6 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       <Button type="primary" label="Briši" onPress={() => removeNumber()} />
       <Button type="primary" label="Pucaj" onPress={() => evaluate()} />
       <Button onPress={() => navigation.push('ScreenOne')} type="ternary" label="Go back" />
-    </Container>
+    </View>
   );
 }
-/* const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 50,
-    borderWidth: 1,
-    backgroundColor: '#000',
-  },
-  item: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    margin: 1,
-    height: Dimensions.get('window').width / numColumns,
-    borderWidth: 1,
-    backgroundColor: '#fff',
-  },
-  buttoncontainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 10,
-  },
-  number_button: {
-    width: 90,
-    height: 40,
-    backgroundColor: '#35bd59',
-    borderRadius: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  operator_button: {
-    width: 70,
-    height: 40,
-    backgroundColor: '#a827cf',
-    borderRadius: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button_text: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-});
- */

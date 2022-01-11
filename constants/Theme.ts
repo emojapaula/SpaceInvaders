@@ -45,6 +45,7 @@ interface IPalette {
   porsche: string;
   chinaRose: string;
   champagne: string;
+  purple: string;
 }
 export interface IFonts {
   text: string;
@@ -82,6 +83,7 @@ const colors: IPalette = {
   porsche: '#E6B263',
   chinaRose: '#B74F6F',
   champagne: '#EFD5C3',
+  purple: '#1E044D',
 };
 export interface IDefaultTheme {
   palette: IPalette;

@@ -64,7 +64,7 @@ const AppStack = () => {
 const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle as {}}>
-      <Stack.Screen name="GameScreen" component={GameScreen} />
+      {/* <Stack.Screen name="GameScreen" component={GameScreen} /> */}
 
       <Stack.Screen name="CodeScreen" component={CodeScreen} />
       <Stack.Screen name="NameScreen" component={NameScreen} />

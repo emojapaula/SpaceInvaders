@@ -8,7 +8,7 @@ import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { theme } from '../../constants/Theme';
-import { useStudentsData } from '../../context/classContext';
+import { IStudent, useStudentsData } from '../../context/classContext';
 
 const Wrapper = styled(View)`
   display: flex;
@@ -35,8 +35,14 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
 
   const [classCode, setClassCode] = useState('');
   const [valid, setValid] = React.useState(true);
-  //TODO change class to grade because of consistency
-  const { students, getClass } = useStudentsData();
+  const [studentss, setStudents] = useState<IStudent[]>([]);
+
+  const { getClass, students, getStudents } = useStudentsData();
+
+  const validate = async () => {
+    if (classCode === '') return false;
+    return true;
+  };
   /* const validateForm = () => {
     if (classCode === '') {
       setCodeValid('This is required!');
@@ -45,6 +51,26 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
     return true;
   }; */
   //TODO refactor this
+
+  const addToContext = async () => {
+    Keyboard.dismiss();
+
+    const formValid = await validate();
+    if (formValid) {
+      setValid(true);
+      await getClass(classCode);
+      console.log('nakon geta', students);
+      await setStudents(getStudents());
+    } else {
+      setValid(false);
+      console.log('not valid');
+    }
+    console.log('st', students.length);
+    if (students.length !== 0) {
+      navigation.navigate('NameScreen');
+    }
+  };
+
   const onSubmit = useCallback(() => {
     Keyboard.dismiss();
 
@@ -83,7 +109,7 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
             classId
           />
         </InputContainer>
-        <Button onPress={onSubmit} type="primary" label="ENTER" />
+        <Button onPress={addToContext} type="primary" label="ENTER" />
       </Wrapper>
     </TouchableWithoutFeedback>
   );
