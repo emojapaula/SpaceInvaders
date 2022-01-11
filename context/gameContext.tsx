@@ -12,6 +12,7 @@ interface IGameContext {
 interface IGameMethods {
   moveDown: () => boolean;
   shoot: (stupac: number, expression: string) => void;
+  startGame: () => void;
 }
 
 interface IGameProvider {
@@ -61,16 +62,25 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
   };
   const [board, setBoard] = useState<string[]>(initializeBoard());
   const [shootingCounter, setShootingCounter] = useState(1);
-  const [totalTimeTaken, setTotalTimeTaken] = useState(Date.now());
-  const [timer, setTimer] = useState(Date.now());
+  const [totalTimeTaken, setTotalTimeTaken] = useState(0);
+  const [timer, setTimer] = useState(0);
   const [time, setTime] = useState(0);
   const [result, setResult] = useState(0);
 
+  const startGame = () => {
+    setTimer(Date.now());
+    setTotalTimeTaken(Date.now());
+  };
+
   const sendFinalResult = async () => {
-    setTotalTimeTaken(Date.now() - totalTimeTaken);
+    let tempTime = Date.now();
+    setTotalTimeTaken(tempTime - totalTimeTaken);
+    console.log('total', Math.floor(totalTimeTaken / 1000));
+    console.log(`seconds elapsed total = ${Math.floor(totalTimeTaken / 1000)}`);
+
     await AxiosInstance.post('/test/testResult', {
       result: result,
-      totalTimeTaken: totalTimeTaken,
+      totalTimeTaken: Math.floor(totalTimeTaken / 1000),
     });
   };
 
@@ -90,6 +100,8 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     let gameBoard = board;
     for (let i = 56; i < 64; ++i) {
       if (gameBoard[i] !== '0') {
+        console.log('igra je gotva');
+
         sendFinalResult();
         return true;
       }
@@ -137,7 +149,7 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     });
   };
 
-  return <GameContext.Provider value={{ board, moveDown, shoot }}>{children}</GameContext.Provider>;
+  return <GameContext.Provider value={{ startGame, board, moveDown, shoot }}>{children}</GameContext.Provider>;
 }
 
 export const GameContext = createContext(initialGameData as IGameData);

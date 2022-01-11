@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, View, Text, StatusBar } from 'react-native';
+import { FlatList, View, Text, StatusBar, Modal, StyleSheet } from 'react-native';
 
 import Container from '../components/layout/Container';
 //import { Text } from '../components/reusable-components/Text';
@@ -35,54 +35,30 @@ const ButtonContainer = styled(View)`
 `;
 
 export default function GameScreen({ navigation }: RootStackScreenProps<'GameScreen'>) {
-  const { moveDown, board, shoot } = useGameData();
-
-  const gameBoard = board;
+  const { moveDown, shoot, startGame } = useGameData();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
+
   const getRandom = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min) + min);
   };
+  const [modalVisible, setModalVisible] = useState(true);
   const [expression, setExpression] = useState('');
-  //   const [firstDice, setFirstDice] = useState(getRandom(1, 6));
   const [firstDice, setFirstDice] = useState<IDice>({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
   const [secondDice, setSecondDice] = useState<IDice>({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
   const [thirdDice, setThirdDice] = useState<IDice>({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
   const [solution, setSolution] = useState(0);
   const [shootingCounter, setShootingCounter] = useState(0);
+
   function useForceUpdate() {
     const [value, setValue] = useState(0); // integer state
     return () => setValue(value + 1); // update the state to force render
   }
   const forceUpdate = useForceUpdate();
-  const initializeBoard = () => {
-    //napravi polje sa velicinom 1
-    let gameBoard: string[] = ['0'];
-    //dodaj 63 nule da polje bude 64
-    for (let i = 0; i < 63; ++i) {
-      gameBoard.push('0');
-    }
-    //inicijaliziraj 10 cudovista (oznake cudovista 1,2,3,4) u prva 3 reda
-    for (let i = 0; i < 10; ++i) {
-      let position = Math.floor(Math.random() * 24);
-      let monster = Math.floor(Math.random() * 8);
-      if (gameBoard[position] === '0') {
-        // gameBoard[position] = monster.toString();
-        gameBoard[position] = monsters[monster];
-      } else {
-        --i;
-      }
-    }
-    //inicijaliziraj jednog nekog u 4. red 🙂
-    let pozicija = 24 + Math.floor(Math.random() * 8);
-    gameBoard[pozicija] = monsters[Math.floor(Math.random() * 8)];
-
-    return gameBoard;
-  };
 
   const setDices = () => {
     setFirstDice({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
@@ -136,27 +112,30 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     forceUpdate();
   };
 
-  /*   function shoot(stupac: number) {
-    console.log('jesam usao');
-    if (stupac > 0 && stupac < 8) {
-      for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
-        if (gameBoard[i] !== '0') {
-          gameBoard[i] = '0';
-        }
-      }
-    }
-
-    console.log('prije', shootingCounter);
-
-    setShootingCounter(shootingCounter + 1);
-    console.log('poslije', shootingCounter);
-    if (shootingCounter % 3 === 0) moveDown();
-  } */
-
   return (
     <View>
       <StatusBar hidden />
-
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Button
+              type="primary"
+              label="start"
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                startGame();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
       <Board solution={solution} />
       <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text>
 
@@ -180,3 +159,47 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});
