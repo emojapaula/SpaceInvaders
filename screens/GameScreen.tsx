@@ -125,7 +125,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     // eslint-disable-next-line no-eval
     setSolution(eval(expression.split('x').join('*')));
     // eslint-disable-next-line no-eval
-    shoot(eval(expression.split('x').join('*')));
+    shoot(eval(expression.split('x').join('*')), expression);
     setExpression('');
     setShootingCounter(shootingCounter + 1);
     if (shootingCounter % 3 === 0 && shootingCounter !== 0) {
@@ -158,7 +158,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       <StatusBar hidden />
 
       <Board solution={solution} />
-      <Text>Attempts left{3 - (shootingCounter % 3)}</Text>
+      <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text>
 
       <Text>{expression}</Text>
       <Text>{solution}</Text>

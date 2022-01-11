@@ -44,8 +44,8 @@ export const Board: FC<IBoard> = ({ solution }) => {
   const columns = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
   const renderItem = ({ item }: { item: string }) => <MonsterCard monster={item} key={Math.random()} />;
-  const renderColumn = ({ item }: { item: number }) => (
-    <ColumnNumberContainer>
+  const renderColumn = ({ item }: { item: string }) => (
+    <ColumnNumberContainer key={Math.random().toString()}>
       <ColumnNumber>{item}</ColumnNumber>
     </ColumnNumberContainer>
   );

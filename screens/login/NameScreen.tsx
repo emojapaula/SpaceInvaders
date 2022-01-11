@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/layout/Container';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
@@ -49,6 +49,8 @@ export default function NameScreen({ navigation }: RootStackScreenProps<'NameScr
 
   return (
     <Container>
+      <StatusBar hidden />
+
       <Text>nannanananaa</Text>
       <TouchableOpacity onPress={() => navigation.push('ScreenTwo')}>
         <Text>Go to Screen Two!</Text>

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { FlatList, ScrollView, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { FlatList, ScrollView, TouchableOpacity, View, Image, StyleSheet, StatusBar } from 'react-native';
 import Container from '../../components/layout/Container';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
@@ -10,7 +10,7 @@ import { useAuth } from '../../auth/authContext';
 import AnimalCard from '../../components/AnimalCard';
 import { Header } from '../../components/reusable-components/Header';
 
-const ImagesContainer = styled(View)`
+/* const ImagesContainer = styled(View)`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -22,7 +22,7 @@ const ImageContainer = styled(TouchableOpacity)`
   height: 100px;
   width: 100px;
 `;
-
+ */
 const emojis: string[] = [
   'elephant',
   'dog',
@@ -52,7 +52,7 @@ const emojis: string[] = [
 ];
 
 export default function ImageScreen({ navigation, route }: RootStackScreenProps<'ImageScreen'>) {
-  const { chooseImage, signIn } = useAuth();
+  const { signIn } = useAuth();
   const { student } = route.params;
 
   React.useLayoutEffect(() => {
@@ -64,6 +64,8 @@ export default function ImageScreen({ navigation, route }: RootStackScreenProps<
   const renderItem = ({ item }: { item: string }) => <AnimalCard animal={item} />;
   return (
     <Container>
+      <StatusBar hidden />
+
       <Text>Hello {student}</Text>
       <>
         <FlatList

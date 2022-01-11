@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { AxiosInstance } from '../auth/AxiosInstance';
 
 export interface IGame {
@@ -6,16 +6,12 @@ export interface IGame {
 }
 
 interface IGameContext {
-  //   students: IGame[];
   board: string[];
-
-  //   teacherName: string;
-  /*classId: number; //string */
 }
 
 interface IGameMethods {
   moveDown: () => boolean;
-  shoot: (stupac: number) => boolean;
+  shoot: (stupac: number, expression: string) => void;
 }
 
 interface IGameProvider {
@@ -52,7 +48,6 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
       let position = Math.floor(Math.random() * 24);
       let monster = Math.floor(Math.random() * 8);
       if (gameBoard[position] === '0') {
-        // gameBoard[position] = monster.toString();
         gameBoard[position] = monsters[monster];
       } else {
         --i;
@@ -65,12 +60,37 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     return gameBoard;
   };
   const [board, setBoard] = useState<string[]>(initializeBoard());
-  const [shootingCounter, setShootingCounter] = useState(0);
+  const [shootingCounter, setShootingCounter] = useState(1);
+  const [totalTimeTaken, setTotalTimeTaken] = useState(Date.now());
+  const [timer, setTimer] = useState(Date.now());
+  const [time, setTime] = useState(0);
+  const [result, setResult] = useState(0);
+
+  const sendFinalResult = async () => {
+    setTotalTimeTaken(Date.now() - totalTimeTaken);
+    await AxiosInstance.post('/test/testResult', {
+      result: result,
+      totalTimeTaken: totalTimeTaken,
+    });
+  };
+
+  function checkGameOver() {
+    let gameBoard = board;
+
+    for (let i = 0; i < 64; ++i) {
+      if (gameBoard[i] !== '0') {
+        return false;
+      }
+    }
+    console.log('igra je gotva');
+    sendFinalResult();
+  }
 
   function moveDown() {
     let gameBoard = board;
     for (let i = 56; i < 64; ++i) {
       if (gameBoard[i] !== '0') {
+        sendFinalResult();
         return true;
       }
     }
@@ -78,40 +98,44 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     for (let i = 63; i >= 8; --i) {
       gameBoard[i] = gameBoard[i - 8];
     }
-    //BUG
     for (let i = 0; i < 8; ++i) {
       gameBoard[i] = '0';
     }
     setBoard(gameBoard);
-    console.log('jesam');
     return false;
   }
 
-  function shoot(stupac: number) {
+  function shoot(stupac: number, expression: string) {
+    let enemyKilled = false;
+    setTime(Date.now() - timer);
+    setTimer(Date.now());
+    console.log(`seconds elapsed = ${Math.floor(time / 1000)}`);
     setShootingCounter(shootingCounter + 1);
-    // console.log(shootingCounter);
     let gameBoard = board;
 
-    if (stupac < 1 || stupac > 8) return false;
+    // if (stupac < 1 || stupac > 8) return false;
     for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
-      console.log(i, 'tu je', gameBoard[i]);
       if (gameBoard[i] !== '0') {
         gameBoard[i] = '0';
+        setResult(result + 1);
         setBoard(gameBoard);
-        return true;
+        enemyKilled = true;
+        break;
       }
     }
-    return false;
+    sendResult(expression, enemyKilled);
+    checkGameOver();
+
+    // return false;
   }
 
-  console.log('prolaz', shootingCounter);
-
-  /* useEffect(() => {
-    if (shootingCounter % 3 === 0 && shootingCounter !== 0) {
-      console.log('bravo', shootingCounter);
-      moveDown();
-    }
-  }); */
+  const sendResult = async (expression: string, enemyKilled: boolean) => {
+    await AxiosInstance.post('/test/testEntry', {
+      calculation: expression,
+      enemyKilled: enemyKilled,
+      timeTaken: Math.floor(time / 1000),
+    });
+  };
 
   return <GameContext.Provider value={{ board, moveDown, shoot }}>{children}</GameContext.Provider>;
 }
