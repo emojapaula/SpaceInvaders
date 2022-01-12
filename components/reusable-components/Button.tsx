@@ -13,6 +13,7 @@ interface IButton {
   color?: string;
   width?: string;
   icon?: object;
+  disabled?: boolean;
 }
 
 export const CustomButton = styled(TouchableOpacity)<IButton>`
@@ -36,9 +37,10 @@ export const CustomText = styled(Text)<IButton>`
   color: ${(p) => (p.color ? p.color : theme.components.button[p.type].color)};
 `;
 
-const Button: FC<IButton> = ({ label, icon, ...props }) => {
+const Button: FC<IButton> = ({ label, icon, disabled, ...props }) => {
+  // console.log(props.type);
   return (
-    <CustomButton {...props} label={label}>
+    <CustomButton {...props} label={label} disabled={disabled}>
       <CustomText {...props} label={label}>
         {label}
         {icon}

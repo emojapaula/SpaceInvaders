@@ -83,7 +83,7 @@ export default function ImageScreen({ navigation, route }: RootStackScreenProps<
         onPress={() => {
           signIn();
         }}
-        type="secondary"
+        type="ternary"
         label="Log In "
       />
     </Container>

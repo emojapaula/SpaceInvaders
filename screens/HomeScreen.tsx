@@ -11,7 +11,7 @@ export const HomeScreen: FC = ({ navigation }) => {
       <Text>{student.name}</Text>
       <Button onPress={() => navigation.push('GameScreen')} type="primary" label="Game" />
 
-      <Button type="secondary" label="Sign out" onPress={() => signOut()} />
+      <Button type="ternary" label="Sign out" onPress={() => signOut()} />
     </View>
   );
 };

@@ -15,9 +15,9 @@ const Card = styled(View)`
 `;
 
 const Box = styled(View)`
-  border-width: 1px;
+  border-width: 0.5px;
   width: ${wp('11.9%')}px;
-  border-color: ${theme.palette.black};
+  border-color: ${theme.palette.linegrey};
   height: ${hp('6.25%')}px;
   display: flex;
   justify-content: center;

@@ -17,7 +17,7 @@ const Container = styled(View)`
 `;
 
 const Game = styled(View)`
-  background-color: ${theme.palette.grey};
+  background-color: ${theme.palette.black};
 `;
 
 const Row = styled(View)`
@@ -37,7 +37,7 @@ const ColumnNumberContainer = styled(View)`
 const ColumnNumber = styled(Text)`
   font-family: ${theme.fonts.openSemi};
   font-size: ${hp('2%')}px;
-  color: ${theme.palette.primary};
+  color: ${theme.palette.linegrey};
 `;
 
 export const Board: FC<IBoard> = ({ solution }) => {

@@ -10,6 +10,7 @@ interface IComponents {
     primary: IStyling;
     secondary: IStyling;
     ternary: IStyling;
+    disabled: IStyling;
   };
   networkRectangle: {
     noNodes: IStyling;
@@ -46,6 +47,9 @@ interface IPalette {
   chinaRose: string;
   champagne: string;
   purple: string;
+  gainsboro: string;
+  skobeloff: string;
+  burgundy: string;
 }
 export interface IFonts {
   text: string;
@@ -84,6 +88,9 @@ const colors: IPalette = {
   chinaRose: '#B74F6F',
   champagne: '#EFD5C3',
   purple: '#1E044D',
+  gainsboro: '#D8DBE2',
+  skobeloff: '#006C67',
+  burgundy: '#AF1B3F',
 };
 export interface IDefaultTheme {
   palette: IPalette;
@@ -115,16 +122,22 @@ export const theme: IDefaultTheme = {
         borderColor: 'transparent',
       },
       secondary: {
-        color: colors.primary,
+        color: colors.white,
         background: 'transparent',
-        borderWidth: '1px',
-        borderColor: colors.primary,
+        borderWidth: '2px',
+        borderColor: colors.white,
       },
       ternary: {
         color: colors.primary,
         background: 'transparent',
         borderWidth: 0,
         borderColor: 'transparent',
+      },
+      disabled: {
+        color: colors.ash,
+        background: 'transparent',
+        borderWidth: '1px',
+        borderColor: colors.ash,
       },
     },
     input: {

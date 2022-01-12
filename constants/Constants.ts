@@ -9,7 +9,7 @@
     message: 'No nodes mapped',
   },
 }; */
-export type BUTTON_TYPE = 'primary' | 'ternary' | 'secondary';
+export type BUTTON_TYPE = 'primary' | 'ternary' | 'secondary' | 'disabled';
 // export type SIGNAL_TYPE = 'poor' | 'good' | 'excellent' | 'locked';
 
 /* export const SIGNAL_MESSAGE = {
