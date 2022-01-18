@@ -1,15 +1,10 @@
-import React, { FC, useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { FC } from 'react';
+import { View, Text } from 'react-native';
 import styled from 'styled-components';
 import { theme } from '../constants/Theme';
 import { useGameData } from '../context/gameContext';
 import MonsterCard from './MonsterCard';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
-interface IBoard {
-  first?: string[];
-  solution: number;
-}
 
 const Container = styled(View)`
   width: 95%;
@@ -40,7 +35,7 @@ const ColumnNumber = styled(Text)`
   color: ${theme.palette.linegrey};
 `;
 
-export const Board: FC<IBoard> = ({ solution }) => {
+export const Board: FC = () => {
   const columns = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
   const renderItem = ({ item }: { item: string }) => <MonsterCard monster={item} key={Math.random()} />;

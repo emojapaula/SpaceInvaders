@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import * as React from 'react';
-import { FlatList, View, Text, StatusBar, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, View, Text, StatusBar, Modal, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 
 import { RootStackScreenProps } from '../navigation/root-navigator';
 import Button from '../components/reusable-components/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Board } from '../components/Board';
 import { useGameData } from '../context/gameContext';
@@ -80,6 +80,7 @@ const Warning = styled(Text)`
 
 const Background = styled(View)`
   background-color: ${theme.palette.purple};
+  height: 100%;
 `;
 
 const BackspaceContainer = styled(View)`
@@ -141,7 +142,7 @@ const ShootContainer = styled(TouchableOpacity)`
 `;
 
 export default function GameScreen({ navigation }: RootStackScreenProps<'GameScreen'>) {
-  const { moveDown, shoot, startGame } = useGameData();
+  const { moveDown, shoot, startGame, gameOver } = useGameData();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -158,13 +159,11 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [secondDice, setSecondDice] = useState<IDice>({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
   const [thirdDice, setThirdDice] = useState<IDice>({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
   const [solution, setSolution] = useState(0);
-  const [shootingCounter, setShootingCounter] = useState(0);
-
-  function useForceUpdate() {
-    const [value, setValue] = useState(0); // integer state
-    return () => setValue(value + 1); // update the state to force render
-  }
-  const forceUpdate = useForceUpdate();
+  const [shootingCounter, setShootingCounter] = useState(1);
+  const [expressions, setExpressions] = useState<string[]>([]);
+  useEffect(() => {
+    if (gameOver) setModalVisible(true);
+  }, [gameOver]);
 
   const setDices = () => {
     setFirstDice({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
@@ -177,9 +176,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     setSecondDice({ ...secondDice, disabled: false });
     setThirdDice({ ...thirdDice, disabled: false });
   };
-  console.log('1st', firstDice.name, '2nd', secondDice.name, '3d', thirdDice.name);
   const appendNumber = (dice: IDice) => {
-    console.log(dice.name);
     let tempString = expression.concat(dice.number.toString());
     setExpression(tempString);
     if (dice.name === 'firstDice') {
@@ -217,7 +214,11 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   };
 
   const evaluate = () => {
-    if (expression.includes('+') || expression.includes('-') || expression.includes('x') || expression.includes('/')) {
+    if (
+      (expression.includes('+') || expression.includes('-') || expression.includes('x') || expression.includes('/')) &&
+      !expressions.includes(expression)
+    ) {
+      setExpressions([...expressions, expression]);
       enableDices();
       // eslint-disable-next-line no-eval
       setSolution(eval(expression.split('x').join('*')));
@@ -226,14 +227,15 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       setExpression('');
       setShootingCounter(shootingCounter + 1);
       if (shootingCounter % 3 === 0 && shootingCounter !== 0) {
-        console.log('bravo', shootingCounter);
         moveDown();
         setDices();
+        setExpressions([]);
       }
       // forceUpdate();
+    } else {
+      Vibration.vibrate();
     }
   };
-  console.log(thirdDice.disabled);
   return (
     <Background>
       <StatusBar hidden />
@@ -264,7 +266,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
           </ModalView>
         </CenteredView>
       </Modal>
-      <Board solution={solution} />
+      <Board />
       <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text>
       <BackspaceContainer>
         <ExpressionContainer>
@@ -319,7 +321,6 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
           <MaterialCommunityIcons name="pistol" size={50} color={theme.palette.burgundy} />
         </ShootContainer>
       </ButtonContainer>
-      <Button onPress={() => navigation.push('ScreenOne')} type="ternary" label="Go back" />
     </Background>
   );
 }

@@ -25,6 +25,7 @@ export default function useCachedResources() {
           'lato-bold': require('../assets/fonts/Lato-Bold.ttf'),
           'inter-font-bold': require('../assets/fonts/Inter-Bold.ttf'),
           'roboto-medium': require('../assets/fonts/Roboto-Medium.ttf'),
+          'arcade-n': require('../assets/fonts/Arcade-N.ttf'),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

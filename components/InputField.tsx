@@ -9,8 +9,8 @@ import { Text } from './reusable-components/Text';
 
 interface IInputFieldProps extends Partial<ViewStyle> {
   value: string;
-  onChange: (value: string) => void;
-  onChangeEnd: (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => void;
+  onChange?: (value: string) => void;
+  onChangeEnd?: (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => void;
   icon?: string;
   placeholder?: string;
   label?: string;
@@ -23,7 +23,7 @@ interface IInputFieldProps extends Partial<ViewStyle> {
 const Input = styled(TextInput)`
   flex: 1;
   color: ${theme.palette.tundora};
-  font-family: ${theme.fonts.interRegular};
+  font-family: ${theme.fonts.arcadeN};
   font-size: ${hp('7%')}px;
   text-align: center;
 `;
@@ -34,16 +34,19 @@ const Icon = styled(Feather)`
   margin-right: ${wp('3.8%')}px;
 `;
 
-const InputContainer = styled(View)<Partial<ViewStyle>>`
+export const InputContainer = styled(View)<Partial<ViewStyle>>`
   width: ${wp('60%')}px;
   height: ${hp('10.55%')}px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${theme.palette.wildsand};
-  border-radius: 6px;
+  justify-content: center;
+  background-color: ${theme.palette.blackestBlack};
   padding-left: ${wp('5.9%')}px;
   padding-right: ${wp('5.9%')}px;
+  border-width: 5px;
+  border-color: ${theme.palette.linegrey};
+  border-radius: 25px;
 `;
 
 const Container = styled(View)`

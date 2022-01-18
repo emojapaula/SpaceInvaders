@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, TouchableOpacity, View, Image } from 'react-native';
 import Container from '../../components/layout/Container';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
@@ -11,16 +11,41 @@ import { theme } from '../../constants/Theme';
 import { useState } from 'react';
 import { useAuth } from '../../auth/authContext';
 import { Header } from '../../components/reusable-components/Header';
+import { invaders } from '../../assets/assets.icons';
 
-const StyledScrollView = styled(FlatList)`
-  overflow: visible;
-  margin-left: ${wp('5%')}px;
+const Background = styled(View)`
+  height: 100%;
+  background-color: ${theme.palette.eerieBlack};
 `;
 
-const NameCard = styled(TouchableOpacity)`
-  /* display: flex;
+const HeaderContainer = styled(View)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: lightgray; */
+  /* width: 100%; */
+`;
+
+const ImageContainer = styled(View)`
+  width: 60%;
+  height: 30%;
+  display: flex;
   flex-direction: row;
-  justify-content: center; */
+  justify-content: space-between;
+  align-items: center;
+  /* padding-top: 15%; */
+  /* background-color: lightgray; */
+  padding-top: ${hp('20%')}px;
+  margin-bottom: -5%;
+`;
+
+const StyledImage = styled(View)`
+  /* flex: 1; */
+  /* height: 100px; */
+  height: ${hp('15%')}px;
+  width: 60px;
+  width: ${wp('18%')}px;
+  /* height: 50px; */
 `;
 
 export default function NameScreen({ navigation }: RootStackScreenProps<'NameScreen'>) {
@@ -28,41 +53,67 @@ export default function NameScreen({ navigation }: RootStackScreenProps<'NameScr
   const { chooseName } = useAuth();
   // const [student, setStudent] = useState('');
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => <Header label="Find your name" wizard={{ step: 1, totalSteps: 2 }} />,
-    });
-  }, [navigation]);
-
   const renderItem = ({ item }: any) => (
-    <NameCard
+    <TouchableOpacity
       onPress={() => {
         chooseName(item.studentId);
         navigation.navigate('ImageScreen', { student: item.name });
       }}
     >
-      <Text fontSize={hp('3%')} lineHeight={hp('6%')} textAlign="center" color={theme.palette.chinaRose}>
+      <Text
+        fontSize={hp('3%')}
+        lineHeight={hp('6%')}
+        textAlign="center"
+        color={theme.palette.white}
+        fontFamily={theme.fonts.arcadeN}
+      >
         {item.name} {item.surname}
       </Text>
-    </NameCard>
+    </TouchableOpacity>
   );
 
   return (
-    <Container>
+    <Background>
       <StatusBar hidden />
-
-      <Text>nannanananaa</Text>
-      <TouchableOpacity onPress={() => navigation.push('ScreenTwo')}>
-        <Text>Go to Screen Two!</Text>
-      </TouchableOpacity>
-      <Text>lista</Text>
-      <StyledScrollView
-        data={students}
-        renderItem={renderItem}
-        keyExtractor={(item: any) => item.studentId.toString()}
-      />
-
-      <Button onPress={() => navigation.push('NameScreen')} type="secondary" label="Go to networks" />
-    </Container>
+      <>
+        <FlatList
+          data={students}
+          renderItem={renderItem}
+          keyExtractor={(item: any) => item.studentId.toString()}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <HeaderContainer>
+              <Header label="Choose your character" wizard={{ step: 1, totalSteps: 2 }} />
+              <ImageContainer>
+                <StyledImage>
+                  <invaders.purpleInvader />
+                </StyledImage>
+                <StyledImage>
+                  <invaders.purpleInvader />
+                </StyledImage>
+                <StyledImage>
+                  <invaders.purpleInvader />
+                </StyledImage>
+              </ImageContainer>
+            </HeaderContainer>
+          }
+          ListFooterComponent={
+            <HeaderContainer>
+              <ImageContainer>
+                <StyledImage>
+                  <invaders.purpleInvader />
+                </StyledImage>
+                <StyledImage>
+                  <invaders.purpleInvader />
+                </StyledImage>
+                <StyledImage>
+                  <invaders.purpleInvader />
+                </StyledImage>
+              </ImageContainer>
+            </HeaderContainer>
+          }
+        />
+      </>
+    </Background>
   );
 }

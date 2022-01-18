@@ -36,7 +36,7 @@ export default function Navigation() {
 }
 
 const screenOptionStyle = {
-  headerStyle: {
+  /*  headerStyle: {
     backgroundColor: theme.palette.white,
   },
   contentStyle: {
@@ -44,9 +44,10 @@ const screenOptionStyle = {
   },
   headerBackVisible: false,
   headerShadowVisible: false,
-  headerTitleAlign: 'center',
+  headerTitleAlign: 'center', */
+  headerShown: false,
   // headerTitle: ({ children }: { children: string }) => <Header label={children} />,
-  headerLeft: () => <GoBack />,
+  // headerLeft: () => <GoBack />,
 };
 
 const AppStack = () => {

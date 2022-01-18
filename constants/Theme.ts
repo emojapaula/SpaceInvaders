@@ -11,6 +11,7 @@ interface IComponents {
     secondary: IStyling;
     ternary: IStyling;
     disabled: IStyling;
+    arcade: IStyling;
   };
   networkRectangle: {
     noNodes: IStyling;
@@ -50,6 +51,9 @@ interface IPalette {
   gainsboro: string;
   skobeloff: string;
   burgundy: string;
+  blue: string;
+  blackestBlack: string;
+  lightPurple: string;
 }
 export interface IFonts {
   text: string;
@@ -61,6 +65,7 @@ export interface IFonts {
   openBold: string;
   interBold: string;
   robotoMedium: string;
+  arcadeN: string;
 }
 
 const colors: IPalette = {
@@ -91,6 +96,9 @@ const colors: IPalette = {
   gainsboro: '#D8DBE2',
   skobeloff: '#006C67',
   burgundy: '#AF1B3F',
+  blue: '#BFDBF7',
+  blackestBlack: '#000000',
+  lightPurple: '#AC92EC',
 };
 export interface IDefaultTheme {
   palette: IPalette;
@@ -111,13 +119,14 @@ export const theme: IDefaultTheme = {
     openBold: 'open-sans-bold',
     interBold: 'inter-font-bold',
     robotoMedium: 'roboto-medium',
+    arcadeN: 'arcade-n',
   },
 
   components: {
     button: {
       primary: {
         color: colors.white,
-        background: colors.primary,
+        background: colors.purple,
         borderWidth: 0,
         borderColor: 'transparent',
       },
@@ -138,6 +147,12 @@ export const theme: IDefaultTheme = {
         background: 'transparent',
         borderWidth: '1px',
         borderColor: colors.ash,
+      },
+      arcade: {
+        color: colors.white,
+        background: colors.purple,
+        borderWidth: 0,
+        borderColor: 'transparent',
       },
     },
     input: {

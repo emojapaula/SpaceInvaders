@@ -40,9 +40,9 @@ export default function StudentsProvider({ children }: IStudentProvider): React.
       });
       setTeacherName(res.data.teacherName);
       console.log('sad cu settat', res.data.students);
-      return setStudents(res.data.students);
+      setStudents(res.data.students);
     } catch (err) {
-      return console.error(err);
+      console.error(err);
     }
   }, []);
 
