@@ -25,7 +25,7 @@ interface ITextProps {
 }
 
 const StyledText = styled(DefaultText)<ITextProps>`
-  font-family: ${(p) => p.fontFamily || theme.fonts.text};
+  font-family: ${(p) => p.fontFamily || theme.fonts.primary};
   font-size: ${(p) => p.fontSize || hp('2%')}px;
   line-height: ${(p) => p.lineHeight || hp('2.5%')}px;
   text-align: ${(p) => p.textAlign || 'left'};

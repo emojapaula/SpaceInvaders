@@ -1,57 +1,31 @@
 import * as React from 'react';
-import { FlatList, StatusBar, TouchableOpacity, View, Image } from 'react-native';
-import Container from '../../components/layout/Container';
+import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
-import Button from '../../components/reusable-components/Button';
-import { IStudent, useStudentsData } from '../../context/classContext';
+import { ArcadeButton } from '../../components/reusable-components/Button';
+import { useStudentsData } from '../../context/classContext';
 import styled from 'styled-components';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { theme } from '../../constants/Theme';
-import { useState } from 'react';
 import { useAuth } from '../../auth/authContext';
 import { Header } from '../../components/reusable-components/Header';
-import { invaders } from '../../assets/assets.icons';
+import InvaderRow from '../../components/InvaderRow';
 
 const Background = styled(View)`
   height: 100%;
   background-color: ${theme.palette.eerieBlack};
 `;
 
-const HeaderContainer = styled(View)`
+export const HeaderContainer = styled(View)`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background-color: lightgray; */
-  /* width: 100%; */
-`;
-
-const ImageContainer = styled(View)`
-  width: 60%;
-  height: 30%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  /* padding-top: 15%; */
-  /* background-color: lightgray; */
-  padding-top: ${hp('20%')}px;
-  margin-bottom: -5%;
-`;
-
-const StyledImage = styled(View)`
-  /* flex: 1; */
-  /* height: 100px; */
-  height: ${hp('15%')}px;
-  width: 60px;
-  width: ${wp('18%')}px;
-  /* height: 50px; */
+  padding: 7% 0;
 `;
 
 export default function NameScreen({ navigation }: RootStackScreenProps<'NameScreen'>) {
   const { students } = useStudentsData();
   const { chooseName } = useAuth();
-  // const [student, setStudent] = useState('');
 
   const renderItem = ({ item }: any) => (
     <TouchableOpacity
@@ -65,7 +39,7 @@ export default function NameScreen({ navigation }: RootStackScreenProps<'NameScr
         lineHeight={hp('6%')}
         textAlign="center"
         color={theme.palette.white}
-        fontFamily={theme.fonts.arcadeN}
+        fontFamily={theme.fonts.arcade}
       >
         {item.name} {item.surname}
       </Text>
@@ -76,43 +50,22 @@ export default function NameScreen({ navigation }: RootStackScreenProps<'NameScr
     <Background>
       <StatusBar hidden />
       <>
+        <Header label="Choose your character" wizard={{ step: 1, totalSteps: 2 }} />
+        <HeaderContainer>
+          <InvaderRow />
+        </HeaderContainer>
+
         <FlatList
           data={students}
           renderItem={renderItem}
           keyExtractor={(item: any) => item.studentId.toString()}
           showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <HeaderContainer>
-              <Header label="Choose your character" wizard={{ step: 1, totalSteps: 2 }} />
-              <ImageContainer>
-                <StyledImage>
-                  <invaders.purpleInvader />
-                </StyledImage>
-                <StyledImage>
-                  <invaders.purpleInvader />
-                </StyledImage>
-                <StyledImage>
-                  <invaders.purpleInvader />
-                </StyledImage>
-              </ImageContainer>
-            </HeaderContainer>
-          }
-          ListFooterComponent={
-            <HeaderContainer>
-              <ImageContainer>
-                <StyledImage>
-                  <invaders.purpleInvader />
-                </StyledImage>
-                <StyledImage>
-                  <invaders.purpleInvader />
-                </StyledImage>
-                <StyledImage>
-                  <invaders.purpleInvader />
-                </StyledImage>
-              </ImageContainer>
-            </HeaderContainer>
-          }
+          contentContainerStyle={{ backgroundColor: theme.palette.black }}
         />
+        <HeaderContainer>
+          <InvaderRow />
+        </HeaderContainer>
+        <ArcadeButton type="ternary" label="Go back" onPress={() => navigation.goBack()} fontSize={hp('1.5%')} />
       </>
     </Background>
   );

@@ -30,7 +30,7 @@ const ColumnNumberContainer = styled(View)`
 `;
 
 const ColumnNumber = styled(Text)`
-  font-family: ${theme.fonts.openSemi};
+  font-family: ${theme.fonts.primary};
   font-size: ${hp('2%')}px;
   color: ${theme.palette.linegrey};
 `;

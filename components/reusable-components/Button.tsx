@@ -75,6 +75,7 @@ interface IButton {
   width?: string;
   icon?: object;
   fontFamily?: string;
+  fontSize?: number;
   disabled?: boolean;
 }
 
@@ -94,17 +95,18 @@ export const CustomButton = styled(TouchableOpacity)<IButton>`
 `;
 
 const CustomArcadeButton = styled(CustomButton)`
-  min-height: ${hp('10%')}px;
-  max-height: ${hp('10%')}px;
+  min-height: ${hp('8%')}px;
+  max-height: ${hp('8%')}px;
 `;
 
-const CustomArcadeText = styled(Text)`
-  font-family: ${theme.fonts.arcadeN};
+const CustomArcadeText = styled(Text)<IButton>`
+  font-family: ${theme.fonts.arcade};
   color: ${theme.palette.white};
+  font-size: ${(p) => (p.fontSize ? p.fontSize : theme.components.button[p.type].fontSize)}px;
 `;
 
 export const CustomText = styled(Text)<IButton>`
-  font-family: ${(p) => (p.fontFamily ? p.fontFamily : theme.fonts.openBold)};
+  font-family: ${(p) => (p.fontFamily ? p.fontFamily : theme.fonts.primary)};
   font-size: ${hp('2.1%')}px;
   color: ${(p) => (p.color ? p.color : theme.components.button[p.type].color)};
 `;

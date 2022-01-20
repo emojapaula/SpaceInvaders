@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import * as React from 'react';
-import { FlatList, View, Text, StatusBar, Modal, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
+import { View, Text, StatusBar, Modal, TouchableOpacity, Vibration } from 'react-native';
 
 import { RootStackScreenProps } from '../navigation/root-navigator';
 import Button from '../components/reusable-components/Button';
@@ -12,6 +12,7 @@ import { theme } from '../constants/Theme';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { InputContainer } from '../components/InputField';
 
 interface IDice {
   name: string;
@@ -23,19 +24,18 @@ const CenteredView = styled(View)`
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin-top: 22px;
+  margin-top: 3%;
 `;
 
 const ModalView = styled(View)`
   margin: 20px;
   background-color: ${theme.palette.gainsboro};
   border-radius: 20px;
-  padding: 25px 10px;
+  padding: 10% 3%;
   align-items: center;
   box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.9);
   width: 80%;
   height: 60%;
-
   elevation: 7;
   display: flex;
   justify-content: space-between;
@@ -49,32 +49,34 @@ const ButtonContainer = styled(View)`
 `;
 
 const StartButton = styled(TouchableOpacity)`
-  width: ${wp('40%')}px;
+  /* width: ${wp('40%')}px; */
   height: 20%;
   border-radius: 20px;
   background-color: ${theme.palette.purple};
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 5%;
 `;
 
 const StartButtonText = styled(Text)`
-  font-size: ${hp('5%')}px;
+  font-size: ${hp('4%')}px;
   color: ${theme.palette.white};
-  font-family: ${theme.fonts.interBold};
+  font-family: ${theme.fonts.arcade};
 `;
 
 const ReadyText = styled(Text)`
   color: ${theme.palette.skobeloff};
-  font-family: ${theme.fonts.interBold}
-  font-size: ${hp('4%')}px;
+  font-family: ${theme.fonts.arcade}
+  font-size: ${hp('2.8%')}px;
   text-transform: uppercase;
+  text-align: center;
 `;
 
 const Warning = styled(Text)`
- color: ${theme.palette.ash};
-  font-family: ${theme.fonts.interBold}
-  font-size: ${hp('2.5%')}px;
+  color: ${theme.palette.ash};
+  font-family: ${theme.fonts.arcade}
+  font-size: ${hp('2%')}px;
   text-transform: uppercase;
 `;
 
@@ -83,12 +85,7 @@ const Background = styled(View)`
   height: 100%;
 `;
 
-const BackspaceContainer = styled(View)`
-  /*   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start; */
-`;
+const BackspaceContainer = styled(View)``;
 
 const ClearContainer = styled(TouchableOpacity)`
   border-radius: 10px;
@@ -104,14 +101,14 @@ const ClearContainer = styled(TouchableOpacity)`
 
 const Clear = styled(Text)`
   color: ${theme.palette.white};
-  font-family: ${theme.fonts.latoBold}
+  font-family: ${theme.fonts.secondary}
   font-size: ${hp('3%')}px;
 `;
 
 const ExpressionContainer = styled(View)`
   margin-left: 3%;
   width: ${wp('60%')}px;
-  height: ${hp('10%')}px
+  height: ${hp('8%')}px
   border-radius: 10px;
   border-width: 4px;
   border-color: ${theme.palette.white};
@@ -121,24 +118,17 @@ const ExpressionContainer = styled(View)`
   justify-content: space-between;
   padding-right: 1.3% ;
   padding-left: 1.5%;
-  /* margin-right: 2%; */
+  margin-top: ${hp('2%')}px;
 `;
 
 const Expression = styled(Text)`
   color: ${theme.palette.white};
-  font-family: ${theme.fonts.latoBold}
+  font-family: ${theme.fonts.secondary}
   font-size: ${hp('3%')}px;
 `;
 
 const ShootContainer = styled(TouchableOpacity)`
-  height: ${hp('10%')}px;
-  width: ${wp('20%')}px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: ${theme.palette.white};
-  border-radius: 10px;
+  margin-top: ${hp('2%')}px;
 `;
 
 export default function GameScreen({ navigation }: RootStackScreenProps<'GameScreen'>) {
@@ -158,24 +148,13 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [firstDice, setFirstDice] = useState<IDice>({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
   const [secondDice, setSecondDice] = useState<IDice>({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
   const [thirdDice, setThirdDice] = useState<IDice>({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
-  const [solution, setSolution] = useState(0);
   const [shootingCounter, setShootingCounter] = useState(1);
   const [expressions, setExpressions] = useState<string[]>([]);
+
   useEffect(() => {
-    if (gameOver) setModalVisible(true);
-  }, [gameOver]);
+    if (gameOver) setModalVisible(!modalVisible);
+  }, [gameOver, modalVisible]);
 
-  const setDices = () => {
-    setFirstDice({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
-    setSecondDice({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
-    setThirdDice({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
-  };
-
-  const enableDices = () => {
-    setFirstDice({ ...firstDice, disabled: false });
-    setSecondDice({ ...secondDice, disabled: false });
-    setThirdDice({ ...thirdDice, disabled: false });
-  };
   const appendNumber = (dice: IDice) => {
     let tempString = expression.concat(dice.number.toString());
     setExpression(tempString);
@@ -213,6 +192,12 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     }
   };
 
+  const enableDices = () => {
+    setFirstDice({ ...firstDice, disabled: false });
+    setSecondDice({ ...secondDice, disabled: false });
+    setThirdDice({ ...thirdDice, disabled: false });
+  };
+
   const evaluate = () => {
     if (
       (expression.includes('+') || expression.includes('-') || expression.includes('x') || expression.includes('/')) &&
@@ -220,10 +205,13 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
     ) {
       setExpressions([...expressions, expression]);
       enableDices();
-      // eslint-disable-next-line no-eval
-      setSolution(eval(expression.split('x').join('*')));
-      // eslint-disable-next-line no-eval
-      shoot(eval(expression.split('x').join('*')), expression);
+      try {
+        // eslint-disable-next-line no-eval
+        shoot(eval(expression.split('x').join('*')), expression);
+      } catch {
+        Vibration.vibrate();
+      }
+
       setExpression('');
       setShootingCounter(shootingCounter + 1);
       if (shootingCounter % 3 === 0 && shootingCounter !== 0) {
@@ -231,11 +219,17 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
         setDices();
         setExpressions([]);
       }
-      // forceUpdate();
     } else {
       Vibration.vibrate();
     }
   };
+
+  const setDices = () => {
+    setFirstDice({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
+    setSecondDice({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
+    setThirdDice({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
+  };
+
   return (
     <Background>
       <StatusBar hidden />
@@ -255,6 +249,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
               <Warning />
               <Warning>Don't let the monsters eat you!</Warning>
             </View>
+
             <StartButton
               onPress={() => {
                 setModalVisible(!modalVisible);
@@ -267,7 +262,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
         </CenteredView>
       </Modal>
       <Board />
-      <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text>
+      {/* <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text> */}
       <BackspaceContainer>
         <ExpressionContainer>
           <Expression>{expression}</Expression>
@@ -276,7 +271,6 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
           </TouchableOpacity>
         </ExpressionContainer>
       </BackspaceContainer>
-      <Text>{solution}</Text>
       <ButtonContainer>
         <Button
           type={firstDice.disabled ? 'disabled' : 'secondary'}
@@ -318,7 +312,9 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       </ButtonContainer>
       <ButtonContainer>
         <ShootContainer onPress={() => evaluate()}>
-          <MaterialCommunityIcons name="pistol" size={50} color={theme.palette.burgundy} />
+          <InputContainer>
+            <MaterialCommunityIcons name="pistol" size={50} color={theme.palette.white} />
+          </InputContainer>
         </ShootContainer>
       </ButtonContainer>
     </Background>

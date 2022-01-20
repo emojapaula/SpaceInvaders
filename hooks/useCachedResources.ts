@@ -15,16 +15,8 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
-          'open-sans': require('../assets/fonts/OpenSans-Regular.ttf'),
-          'inter-semiBold': require('../assets/fonts/Inter-SemiBold.ttf'),
-          'inter-regular': require('../assets/fonts/Inter-Regular.ttf'),
-          'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
           'open-semi-bold': require('../assets/fonts/OpenSans-SemiBold.ttf'),
-          'open-sans-bold': require('../assets/fonts/OpenSans-Bold.ttf'),
           'lato-bold': require('../assets/fonts/Lato-Bold.ttf'),
-          'inter-font-bold': require('../assets/fonts/Inter-Bold.ttf'),
-          'roboto-medium': require('../assets/fonts/Roboto-Medium.ttf'),
           'arcade-n': require('../assets/fonts/Arcade-N.ttf'),
         });
       } catch (e) {

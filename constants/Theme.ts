@@ -3,7 +3,7 @@ interface IStyling {
   background?: string;
   borderColor?: string;
   borderWidth?: string | number;
-  fontSize?: string;
+  fontSize?: number;
 }
 interface IComponents {
   button: {
@@ -11,92 +11,37 @@ interface IComponents {
     secondary: IStyling;
     ternary: IStyling;
     disabled: IStyling;
-    arcade: IStyling;
-  };
-  networkRectangle: {
-    noNodes: IStyling;
-    allNodes: IStyling;
-    someNodes: IStyling;
-  };
-  input: {
-    label: IStyling;
-    info: IStyling;
   };
 }
 interface IPalette {
-  primary: string;
-  lightgrey: string;
   white: string;
-  darkgrey: string;
-  wildsand: string;
-  lightBlue: string;
-  red: string;
-  green: string;
-  anothergrey: string;
   linegrey: string;
   tundora: string;
-  seaweed: string;
-  grey: string;
-  dirtywhite: string;
   black: string;
   ash: string;
   eerieBlack: string;
-  brick: string;
-  marigold: string;
-  blackOlive: string;
-  porsche: string;
-  chinaRose: string;
-  champagne: string;
   purple: string;
   gainsboro: string;
   skobeloff: string;
-  burgundy: string;
-  blue: string;
   blackestBlack: string;
   lightPurple: string;
 }
 export interface IFonts {
-  text: string;
-  interSemiBold: string;
-  interRegular: string;
-  robotoBold: string;
-  openSemi: string;
-  latoBold: string;
-  openBold: string;
-  interBold: string;
-  robotoMedium: string;
-  arcadeN: string;
+  primary: string;
+  secondary: string;
+  arcade: string;
 }
 
 const colors: IPalette = {
-  primary: '#0089C6',
   white: '#fff',
-  lightgrey: '#EFEFEF',
-  darkgrey: '#9A9A9A',
-  grey: '#828282',
-  wildsand: '#F4F4F4',
-  lightBlue: '#5BC0DE',
-  red: '#D34747',
-  green: '#5CB85C',
-  anothergrey: '#828282',
   linegrey: '#E8E8E8',
   tundora: '#4E4E4E',
-  seaweed: '#18839E',
-  dirtywhite: '#d8d8d8',
   black: '#202020',
   ash: '#484848',
   eerieBlack: '#1d1d1d',
-  brick: '#C22D2D',
-  marigold: '#C2872D',
-  blackOlive: '#3A3A3A',
-  porsche: '#E6B263',
-  chinaRose: '#B74F6F',
-  champagne: '#EFD5C3',
   purple: '#1E044D',
   gainsboro: '#D8DBE2',
   skobeloff: '#006C67',
-  burgundy: '#AF1B3F',
-  blue: '#BFDBF7',
   blackestBlack: '#000000',
   lightPurple: '#AC92EC',
 };
@@ -110,16 +55,9 @@ export const theme: IDefaultTheme = {
   palette: colors,
 
   fonts: {
-    text: 'open-sans',
-    interSemiBold: 'inter-semiBold',
-    interRegular: 'inter-regular',
-    robotoBold: 'roboto-bold',
-    openSemi: 'open-semi-bold',
-    latoBold: 'lato-bold',
-    openBold: 'open-sans-bold',
-    interBold: 'inter-font-bold',
-    robotoMedium: 'roboto-medium',
-    arcadeN: 'arcade-n',
+    primary: 'open-semi-bold',
+    secondary: 'lato-bold',
+    arcade: 'arcade-n',
   },
 
   components: {
@@ -129,51 +67,28 @@ export const theme: IDefaultTheme = {
         background: colors.purple,
         borderWidth: 0,
         borderColor: 'transparent',
+        fontSize: 14,
       },
       secondary: {
         color: colors.white,
         background: 'transparent',
         borderWidth: '2px',
         borderColor: colors.white,
+        fontSize: 18,
       },
       ternary: {
-        color: colors.primary,
+        color: colors.purple,
         background: 'transparent',
         borderWidth: 0,
         borderColor: 'transparent',
+        fontSize: 18,
       },
       disabled: {
         color: colors.ash,
         background: 'transparent',
         borderWidth: '1px',
         borderColor: colors.ash,
-      },
-      arcade: {
-        color: colors.white,
-        background: colors.purple,
-        borderWidth: 0,
-        borderColor: 'transparent',
-      },
-    },
-    input: {
-      label: {
-        color: colors.anothergrey,
-        fontSize: '9px',
-      },
-      info: {
-        color: colors.marigold,
-        fontSize: '9px',
-      },
-    },
-    networkRectangle: {
-      noNodes: {
-        background: colors.lightBlue,
-      },
-      someNodes: {
-        background: colors.red,
-      },
-      allNodes: {
-        background: colors.green,
+        fontSize: 18,
       },
     },
   },

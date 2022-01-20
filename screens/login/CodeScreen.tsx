@@ -1,23 +1,14 @@
 import * as React from 'react';
-import {
-  Keyboard,
-  TouchableWithoutFeedback,
-  View,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from 'react-native';
+import { Keyboard, TouchableWithoutFeedback, View, Image, StatusBar } from 'react-native';
 import { RootStackScreenProps } from '../../navigation/root-navigator';
 import { Text } from '../../components/reusable-components/Text';
-import Button, { ArcadeButton } from '../../components/reusable-components/Button';
+import { ArcadeButton } from '../../components/reusable-components/Button';
 import { InputField } from '../../components/InputField';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { theme } from '../../constants/Theme';
-import { IStudent, useStudentsData } from '../../context/classContext';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useStudentsData } from '../../context/classContext';
 
 const Wrapper = styled(View)`
   display: flex;
@@ -29,17 +20,10 @@ const Wrapper = styled(View)`
   background-color: ${theme.palette.blackestBlack};
 `;
 const InputContainer = styled(View)`
-  /* padding-top: 40%; */
   display: flex;
   justify-content: space-around;
   height: 50%;
-  /* background-color: lightgray; */
   margin-top: -10%;
-`;
-
-const Bla = styled(ScrollView)`
-  background-color: red;
-  height: 100%;
 `;
 
 const Center = styled(View)`
@@ -60,10 +44,8 @@ const ImageContainer = styled(View)`
 `;
 
 const StyledImage = styled(Image)`
-  /* flex: 1; */
   height: 100%;
   width: 40%;
-  /* height: 50px; */
 `;
 
 export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScreen'>) {
@@ -72,7 +54,6 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
       headerShown: false,
     });
   }, [navigation]);
-  const headerHeight = useHeaderHeight();
 
   const [classCode, setClassCode] = useState('');
 
@@ -90,11 +71,8 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
 
     const formValid = await validate();
     if (formValid) {
-      // setValid(true);
       await getClass(classCode);
-      //await setStudents(getStudents());
     } else {
-      // setValid(false);
       console.log('not valid');
     }
   };
@@ -109,6 +87,8 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <Wrapper>
+        <StatusBar hidden />
+
         <ImageContainer>
           <StyledImage source={require('../../assets/images/invader.jpg')} />
         </ImageContainer>
@@ -116,7 +96,7 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
         <InputContainer>
           <Text
             textAlign="center"
-            fontFamily={theme.fonts.arcadeN}
+            fontFamily={theme.fonts.arcade}
             fontSize={hp('4%')}
             lineHeight={hp('5%')}
             color={theme.palette.linegrey}
@@ -133,7 +113,7 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
           />
         </InputContainer>
         <Center>
-          <ArcadeButton onPress={addToContext} type="arcade" label="ENTER" width="70%" />
+          <ArcadeButton onPress={addToContext} type="primary" label="ENTER" width="70%" />
         </Center>
       </Wrapper>
     </TouchableWithoutFeedback>

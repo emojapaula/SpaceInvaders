@@ -6,9 +6,6 @@ const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
-      ScreenOne: 'one',
-      ScreenTwo: 'two',
-      Modal: 'modal',
       NotFound: '*',
       CodeScreen: 'code',
       NameScreen: 'name',

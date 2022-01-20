@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { AxiosInstance } from '../auth/AxiosInstance';
 
 export interface IGame {
@@ -12,7 +12,7 @@ interface IGameContext {
 
 interface IGameMethods {
   moveDown: () => boolean;
-  shoot: (stupac: number, expression: string) => void;
+  shoot: (stupac: number, expression: string) => Promise<void>;
   startGame: () => void;
 }
 
@@ -50,12 +50,22 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
   };
 
   const [board, setBoard] = useState<string[]>(initializeEmptyBoard());
-  const [shootingCounter, setShootingCounter] = useState(1);
-  const [totalTimeTaken, setTotalTimeTaken] = useState(0);
-  const [timer, setTimer] = useState(0);
+  // const [shootingCounter, setShootingCounter] = useState(1);
+  const [totalTimeTaken, setTotalTimeTaken] = useState(Date.now());
+  const [timer, setTimer] = useState(Date.now());
   const [time, setTime] = useState(0);
   const [result, setResult] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [flag, setFlag] = useState(false);
+
+  const startGame = () => {
+    initializeBoard();
+    setTimer(Date.now());
+    setTotalTimeTaken(Date.now());
+    setFlag(false);
+    setResult(0);
+    // setShootingCounter(0);
+  };
 
   const initializeBoard = () => {
     let gameBoard = initializeEmptyBoard();
@@ -76,21 +86,35 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     return gameBoard;
   };
 
-  const startGame = () => {
-    initializeBoard();
+  const shoot = async (stupac: number, expression: string) => {
+    let enemyKilled = false;
+    setTime(Date.now() - timer);
     setTimer(Date.now());
-    setTotalTimeTaken(Date.now());
+    // console.log(`izmedu seconds elapsed = ${Math.floor(time / 1000)}`);
+    // setShootingCounter(shootingCounter + 1);
+    let gameBoard = board;
+
+    if (stupac > 0 && stupac < 9) {
+      for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
+        if (gameBoard[i] !== '0') {
+          gameBoard[i] = '0';
+          setResult(result + 1);
+          setBoard(gameBoard);
+          enemyKilled = true;
+          break;
+        }
+      }
+    }
+
+    sendResult(expression, enemyKilled);
+    checkGameOver();
   };
 
-  const sendFinalResult = async () => {
-    let tempTime = Date.now();
-    setTotalTimeTaken(tempTime - totalTimeTaken);
-    // console.log('total', Math.floor(totalTimeTaken / 1000));
-    // console.log(`seconds elapsed total = ${Math.floor(totalTimeTaken / 1000)}`);
-
-    await AxiosInstance.post('/test/testResult', {
-      result: result,
-      totalTimeTaken: Math.floor(totalTimeTaken / 1000),
+  const sendResult = async (expression: string, enemyKilled: boolean) => {
+    await AxiosInstance.post('/test/testEntry', {
+      calculation: expression,
+      enemyKilled: enemyKilled,
+      timeTaken: Math.floor(time / 1000),
     });
   };
 
@@ -102,10 +126,20 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
         return false;
       }
     }
-    setGameOver(true);
+    // setGameOver(true);
     console.log('igra je gotva');
+    let tempTime = Date.now();
+    console.log('1');
+    setFlag(true);
+    console.log('2');
+
+    setTotalTimeTaken(tempTime - totalTimeTaken);
+    console.log('3');
+
+    console.log('4');
+
     setBoard(initializeEmptyBoard());
-    sendFinalResult();
+    console.log('5');
   }
 
   function moveDown() {
@@ -130,39 +164,22 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     return false;
   }
 
-  function shoot(stupac: number, expression: string) {
-    let enemyKilled = false;
-    setTime(Date.now() - timer);
-    setTimer(Date.now());
-    // console.log(`seconds elapsed = ${Math.floor(time / 1000)}`);
-    setShootingCounter(shootingCounter + 1);
-    let gameBoard = board;
-
-    if (stupac > 0 && stupac < 9) {
-      for (let i = 63 - (8 - stupac); i >= 0; i -= 8) {
-        if (gameBoard[i] !== '0') {
-          gameBoard[i] = '0';
-          setResult(result + 1);
-          setBoard(gameBoard);
-          enemyKilled = true;
-          break;
-        }
-      }
-    }
-
-    sendResult(expression, enemyKilled);
-    checkGameOver();
-
-    // return false;
-  }
-
-  const sendResult = async (expression: string, enemyKilled: boolean) => {
-    await AxiosInstance.post('/test/testEntry', {
-      calculation: expression,
-      enemyKilled: enemyKilled,
-      timeTaken: Math.floor(time / 1000),
+  const sendFinalResult = useCallback(async () => {
+    /* const bla = Math.floor(totalTimeTaken / 1000);
+    console.log(bla); */
+    await AxiosInstance.post('/test/testResult', {
+      result: result,
+      totalTimeTaken: Math.floor(totalTimeTaken / 1000),
     });
-  };
+  }, [result, totalTimeTaken]);
+
+  useEffect(() => {
+    /* console.log(`tuturu seconds elapsed total = ${Math.floor(totalTimeTaken / 1000)}`);
+    console.log('flag', flag); */
+    if (flag) {
+      sendFinalResult();
+    }
+  }, [flag, sendFinalResult, totalTimeTaken]);
 
   return (
     <GameContext.Provider value={{ startGame, board, moveDown, shoot, gameOver }}>{children}</GameContext.Provider>

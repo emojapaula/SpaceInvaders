@@ -8,6 +8,7 @@ import { Header } from '../../components/reusable-components/Header';
 import { theme } from '../../constants/Theme';
 import { InputContainer } from '../../components/InputField';
 import Emoji from 'react-native-emoji';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const ImagesContainer = styled(View)`
   display: flex;
@@ -17,10 +18,9 @@ const ImagesContainer = styled(View)`
   align-items: flex-start;
   width: 100%;
   padding: 10%;
-  margin-bottom: -15%;
 `;
 
-const Background = styled(View)`
+export const Background = styled(View)`
   height: 100%;
   background-color: ${theme.palette.eerieBlack};
   display: flex;
@@ -61,9 +61,8 @@ const emojis: string[] = [
   'giraffe_face',
 ];
 
-export default function ImageScreen({ navigation, route }: RootStackScreenProps<'ImageScreen'>) {
+export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageScreen'>) {
   const { signIn, chooseImage } = useAuth();
-  const { student } = route.params;
   const [animal, setAnimal] = useState('');
 
   React.useLayoutEffect(() => {
@@ -96,8 +95,9 @@ export default function ImageScreen({ navigation, route }: RootStackScreenProps<
         </Center>
       </>
       <Center>
-        <ArcadeButton onPress={signIn} type="arcade" label="ENTER" width="70%" />
+        <ArcadeButton onPress={signIn} type="primary" label="ENTER" width="70%" />
       </Center>
+      <ArcadeButton type="ternary" label="Go back" onPress={() => navigation.goBack()} fontSize={hp('1.5%')} />
     </Background>
   );
 }
