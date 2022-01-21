@@ -1,18 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, { FC, useEffect } from 'react';
+import { Animated, Easing, View } from 'react-native';
 import styled from 'styled-components';
 import Emoji from 'react-native-emoji';
 import { theme } from '../constants/Theme';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useGameData } from '../context/gameContext';
 
-interface IMonsterCardInterface {
+export interface IMonsterCard {
   monster: string;
+  animate?: boolean;
 }
-
-const Card = styled(View)`
-  /* width: 1%; */
-  /* background-color: white; */
-`;
 
 const Box = styled(View)`
   border-width: 0.5px;
@@ -24,21 +22,85 @@ const Box = styled(View)`
   align-items: center;
 `;
 
-export default function MonsterCard({ monster }: IMonsterCardInterface) {
+export const MonsterCard: FC<IMonsterCard> = ({ monster, animate }) => {
+  const monsterAnimationOpacity = new Animated.Value(1);
+  const monsterAnimationStyle = {
+    opacity: monsterAnimationOpacity,
+  };
+
+  const animation = () => {
+    Animated.sequence([
+      Animated.delay(0),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 0,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 1,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 0,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 1,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 0,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 1,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 0,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+      Animated.timing(monsterAnimationOpacity, {
+        toValue: 1,
+        duration: 100,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }),
+    ]).start();
+  };
+
+  /* useEffect(() => {
+    if (killed) {
+      animation();
+    }
+  }); */
+
+  if (animate) animation();
+
   return (
-    <Card>
+    <>
       {monster === '0' ? (
-        <Box></Box>
+        <Box />
       ) : (
         <Box>
-          <Emoji name={monster} style={styles.item} />
+          <Animated.View style={monsterAnimationStyle}>
+            <Emoji name={monster} style={{ fontSize: 30 }} />
+          </Animated.View>
         </Box>
       )}
-    </Card>
+    </>
   );
-}
-const styles = StyleSheet.create({
-  item: {
-    fontSize: 30,
-  },
-});
+};
