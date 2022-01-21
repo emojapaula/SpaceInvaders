@@ -151,15 +151,11 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [shootingCounter, setShootingCounter] = useState(1);
   const [expressions, setExpressions] = useState<string[]>([]);
 
-  /*  useEffect(() => {
-    if (gameOver) setModalVisible(!modalVisible);
-  }, [gameOver, modalVisible]); */
-
-  console.log('sad je', gameOver);
-
   useEffect(() => {
     if (gameOver) {
       setModalVisible(true);
+      setShootingCounter(1);
+      setExpressions([]);
     }
   }, [gameOver]);
 
