@@ -8,7 +8,7 @@ import { Header } from '../../components/reusable-components/Header';
 import { theme } from '../../constants/Theme';
 import { InputContainer } from '../../components/InputField';
 import Emoji from 'react-native-emoji';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const ImagesContainer = styled(View)`
   display: flex;
@@ -17,7 +17,7 @@ const ImagesContainer = styled(View)`
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  padding: 10%;
+  padding: 5% 8.33%;
 `;
 
 export const Background = styled(View)`
@@ -74,6 +74,7 @@ export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageS
   return (
     <Background>
       <StatusBar hidden />
+
       <Header label="Choose your companion" wizard={{ step: 2, totalSteps: 2 }} />
 
       <>
@@ -86,7 +87,7 @@ export default function ImageScreen({ navigation }: RootStackScreenProps<'ImageS
                 setAnimal(emoji);
               }}
             >
-              <Emoji name={emoji} style={{ fontSize: 50 }} />
+              <Emoji name={emoji} style={{ fontSize: wp('12.9%') }} />
             </TouchableOpacity>
           ))}
         </ImagesContainer>

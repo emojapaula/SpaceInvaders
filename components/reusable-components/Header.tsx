@@ -18,7 +18,7 @@ const Container = styled(View)`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 15%;
+  padding-top: 5%;
   /* margin-bottom: -10%; */
 `;
 

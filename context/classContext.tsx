@@ -15,7 +15,6 @@ interface IStudentContext {
 
 interface IStudentMethods {
   getClass: (classId: string) => void;
-  getStudents: () => IStudent[];
 }
 
 interface IStudentProvider {
@@ -39,23 +38,13 @@ export default function StudentsProvider({ children }: IStudentProvider): React.
         params: { classId: classId },
       });
       setTeacherName(res.data.teacherName);
-      console.log('sad cu settat', res.data.students);
       setStudents(res.data.students);
     } catch (err) {
       console.error(err);
     }
   }, []);
 
-  const getStudents = () => {
-    console.log('u fji', students);
-    return students;
-  };
-
-  return (
-    <StudentsContext.Provider value={{ getStudents, students, getClass, teacherName }}>
-      {children}
-    </StudentsContext.Provider>
-  );
+  return <StudentsContext.Provider value={{ students, getClass, teacherName }}>{children}</StudentsContext.Provider>;
 }
 
 export const StudentsContext = createContext(initialStudentData as IStudentData);

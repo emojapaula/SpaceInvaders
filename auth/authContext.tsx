@@ -36,12 +36,10 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const chooseName = (id: string) => {
-    console.log('id', id);
     setStudentId(id);
   };
 
   const chooseImage = (image: string) => {
-    console.log(image);
     setImage(image);
   };
 
@@ -65,7 +63,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     })
       .then((res) => {
         const { data: _authData } = res;
-        console.log('data', res.data);
 
         setAuthData(_authData);
         AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));

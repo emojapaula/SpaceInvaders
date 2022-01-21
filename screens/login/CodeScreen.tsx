@@ -78,7 +78,6 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
   };
 
   useEffect(() => {
-    console.log('st', students.length);
     if (students.length !== 0) {
       navigation.navigate('NameScreen');
     }
@@ -103,14 +102,7 @@ export default function CodeScreen({ navigation }: RootStackScreenProps<'CodeScr
           >
             Enter your class code:
           </Text>
-          <InputField
-            borderRadius={25}
-            value={classCode}
-            onChange={setClassCode}
-            onChangeEnd={() => console.log(classCode)}
-            keyboardType="number-pad"
-            classId
-          />
+          <InputField borderRadius={25} value={classCode} onChange={setClassCode} keyboardType="number-pad" classId />
         </InputContainer>
         <Center>
           <ArcadeButton onPress={addToContext} type="primary" label="ENTER" width="70%" />

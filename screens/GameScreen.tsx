@@ -151,9 +151,17 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
   const [shootingCounter, setShootingCounter] = useState(1);
   const [expressions, setExpressions] = useState<string[]>([]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (gameOver) setModalVisible(!modalVisible);
-  }, [gameOver, modalVisible]);
+  }, [gameOver, modalVisible]); */
+
+  console.log('sad je', gameOver);
+
+  useEffect(() => {
+    if (gameOver) {
+      setModalVisible(true);
+    }
+  }, [gameOver]);
 
   const appendNumber = (dice: IDice) => {
     let tempString = expression.concat(dice.number.toString());
@@ -238,7 +246,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setModalVisible(false);
         }}
       >
         <CenteredView>
@@ -252,7 +260,7 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
 
             <StartButton
               onPress={() => {
-                setModalVisible(!modalVisible);
+                setModalVisible(false);
                 startGame();
               }}
             >

@@ -27,8 +27,6 @@ export default function StudentProvider({ children }: IStudentProvider): React.R
   const [student, setStudent] = useState<IStudent>();
 
   const chooseStudent = (name: string, surname: string, studentId: string) => {
-    console.log('jesam');
-
     setStudent({ name, surname, studentId });
   };
 

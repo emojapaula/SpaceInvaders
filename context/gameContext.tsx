@@ -50,21 +50,21 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
   };
 
   const [board, setBoard] = useState<string[]>(initializeEmptyBoard());
-  // const [shootingCounter, setShootingCounter] = useState(1);
   const [totalTimeTaken, setTotalTimeTaken] = useState(Date.now());
   const [timer, setTimer] = useState(Date.now());
   const [time, setTime] = useState(0);
   const [result, setResult] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [flag, setFlag] = useState(false);
+  // const [shootingCounter, setShootingCounter] = useState(1);
 
   const startGame = () => {
-    initializeBoard();
+    setGameOver(false);
     setTimer(Date.now());
     setTotalTimeTaken(Date.now());
     setFlag(false);
     setResult(0);
-    // setShootingCounter(0);
+    initializeBoard();
   };
 
   const initializeBoard = () => {
@@ -126,20 +126,13 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
         return false;
       }
     }
-    // setGameOver(true);
-    console.log('igra je gotva');
+    setGameOver(true);
     let tempTime = Date.now();
-    console.log('1');
     setFlag(true);
-    console.log('2');
 
     setTotalTimeTaken(tempTime - totalTimeTaken);
-    console.log('3');
-
-    console.log('4');
 
     setBoard(initializeEmptyBoard());
-    console.log('5');
   }
 
   function moveDown() {
@@ -174,8 +167,6 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
   }, [result, totalTimeTaken]);
 
   useEffect(() => {
-    /* console.log(`tuturu seconds elapsed total = ${Math.floor(totalTimeTaken / 1000)}`);
-    console.log('flag', flag); */
     if (flag) {
       sendFinalResult();
     }
