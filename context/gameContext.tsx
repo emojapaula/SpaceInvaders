@@ -105,6 +105,7 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
             gameBoard[i].animate = false;
             gameBoard[i].monster = '0';
             setBoard(gameBoard);
+            checkGameOver();
           }
           setTimeout(wait, 1000);
           //3. moram ga ubiti
@@ -119,7 +120,6 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     }
 
     sendResult(expression, enemyKilled);
-    checkGameOver();
   };
 
   const sendResult = async (expression: string, enemyKilled: boolean) => {

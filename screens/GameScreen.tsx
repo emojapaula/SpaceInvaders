@@ -236,7 +236,9 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
 
   const setDices = () => {
     setFirstDice({ name: 'firstDice', number: getRandom(1, 6), disabled: false });
+
     setSecondDice({ name: 'secondDice', number: getRandom(1, 6), disabled: false });
+
     setThirdDice({ name: 'thirdDice', number: getRandom(1, 6), disabled: false });
   };
 
