@@ -57,7 +57,6 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
   const [result, setResult] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [flag, setFlag] = useState(false);
-  // const [shootingCounter, setShootingCounter] = useState(1);
 
   const startGame = () => {
     setGameOver(false);
@@ -103,16 +102,14 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
           //2. moram pricekati da zatreperi
 
           function wait() {
-            console.log('tusam');
             gameBoard[i].animate = false;
             gameBoard[i].monster = '0';
             setBoard(gameBoard);
           }
-          setTimeout(wait, 2000);
+          setTimeout(wait, 1000);
           //3. moram ga ubiti
 
           //4. moram poslat rezultate
-          console.log('tu sam prvo');
           setResult(result + 1);
           setBoard(gameBoard);
           enemyKilled = true;
@@ -155,8 +152,6 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
     for (let i = 56; i < 64; ++i) {
       if (gameBoard[i].monster !== '0') {
         setGameOver(true);
-        console.log('igra je gotva');
-
         sendFinalResult();
         return true;
       }
@@ -173,8 +168,6 @@ export default function GameProvider({ children }: IGameProvider): React.ReactEl
   }
 
   const sendFinalResult = useCallback(async () => {
-    /* const bla = Math.floor(totalTimeTaken / 1000);
-    console.log(bla); */
     await AxiosInstance.post('/test/testResult', {
       result: result,
       totalTimeTaken: Math.floor(totalTimeTaken / 1000),

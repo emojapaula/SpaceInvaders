@@ -37,7 +37,6 @@ const ColumnNumber = styled(Text)`
 
 export const Board: FC = () => {
   const { board } = useGameData();
-  const first = board;
   const columns = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
   const renderItem = ({ item }: { item: IMonsterCard }) => (
@@ -53,14 +52,14 @@ export const Board: FC = () => {
     <Container>
       <Row>{columns.map((item: string) => renderColumn({ item }))}</Row>
       <Game>
-        <Row>{first.slice(0, 8).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(8, 16).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(16, 24).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(24, 32).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(32, 40).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(40, 48).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(48, 56).map((item: IMonsterCard) => renderItem({ item }))}</Row>
-        <Row>{first.slice(56, 64).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(0, 8).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(8, 16).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(16, 24).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(24, 32).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(32, 40).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(40, 48).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(48, 56).map((item: IMonsterCard) => renderItem({ item }))}</Row>
+        <Row>{board.slice(56, 64).map((item: IMonsterCard) => renderItem({ item }))}</Row>
       </Game>
     </Container>
   );

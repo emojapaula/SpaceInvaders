@@ -3,7 +3,7 @@ import * as React from 'react';
 import { View, Text, StatusBar, Modal, TouchableOpacity, Vibration } from 'react-native';
 
 import { RootStackScreenProps } from '../navigation/root-navigator';
-import Button from '../components/reusable-components/Button';
+import Button, { ArcadeButton } from '../components/reusable-components/Button';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Board } from '../components/Board';
@@ -49,7 +49,6 @@ const ButtonContainer = styled(View)`
 `;
 
 const StartButton = styled(TouchableOpacity)`
-  /* width: ${wp('40%')}px; */
   height: 20%;
   border-radius: 20px;
   background-color: ${theme.palette.purple};
@@ -57,6 +56,7 @@ const StartButton = styled(TouchableOpacity)`
   justify-content: center;
   align-items: center;
   padding: 0 5%;
+  margin-top: ${hp('10%')}px;
 `;
 
 const StartButtonText = styled(Text)`
@@ -71,6 +71,7 @@ const ReadyText = styled(Text)`
   font-size: ${hp('2.8%')}px;
   text-transform: uppercase;
   text-align: center;
+  margin-bottom: ${hp('5%')}px;;
 `;
 
 const Warning = styled(Text)`
@@ -84,8 +85,6 @@ const Background = styled(View)`
   background-color: ${theme.palette.purple};
   height: 100%;
 `;
-
-const BackspaceContainer = styled(View)``;
 
 const ClearContainer = styled(TouchableOpacity)`
   border-radius: 10px;
@@ -207,8 +206,6 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
       (expression.includes('+') || expression.includes('-') || expression.includes('x') || expression.includes('/')) &&
       !expressions.includes(expression)
     ) {
-      setExpressions([...expressions, expression]);
-      enableDices();
       try {
         // eslint-disable-next-line no-eval
         shoot(eval(expression.split('x').join('*')), expression);
@@ -216,12 +213,21 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
         Vibration.vibrate();
       }
 
-      setExpression('');
+      function wait1() {
+        setExpressions([...expressions, expression]);
+        enableDices();
+        setExpression('');
+      }
+      setTimeout(wait1, 1000);
+
       setShootingCounter(shootingCounter + 1);
       if (shootingCounter % 3 === 0 && shootingCounter !== 0) {
-        moveDown();
-        setDices();
-        setExpressions([]);
+        function wait() {
+          moveDown();
+          setDices();
+          setExpressions([]);
+        }
+        setTimeout(wait, 1000);
       }
     } else {
       Vibration.vibrate();
@@ -253,28 +259,29 @@ export default function GameScreen({ navigation }: RootStackScreenProps<'GameScr
               <Warning />
               <Warning>Don't let the monsters eat you!</Warning>
             </View>
-
-            <StartButton
-              onPress={() => {
-                setModalVisible(false);
-                startGame();
-              }}
-            >
-              <StartButtonText>START</StartButtonText>
-            </StartButton>
+            <>
+              <StartButton
+                onPress={() => {
+                  setModalVisible(false);
+                  startGame();
+                }}
+              >
+                <StartButtonText>START</StartButtonText>
+              </StartButton>
+              <ArcadeButton type="ternary" label="Go back" onPress={() => navigation.goBack()} fontSize={hp('1.5%')} />
+            </>
           </ModalView>
         </CenteredView>
       </Modal>
       <Board />
-      {/* <Text>Attempts left{3 - ((shootingCounter - 1) % 3)}</Text> */}
-      <BackspaceContainer>
-        <ExpressionContainer>
-          <Expression>{expression}</Expression>
-          <TouchableOpacity onPress={() => removeNumber()}>
-            <Ionicons name="ios-backspace" size={30} color={theme.palette.white} />
-          </TouchableOpacity>
-        </ExpressionContainer>
-      </BackspaceContainer>
+
+      <ExpressionContainer>
+        <Expression>{expression}</Expression>
+        <TouchableOpacity onPress={() => removeNumber()}>
+          <Ionicons name="ios-backspace" size={30} color={theme.palette.white} />
+        </TouchableOpacity>
+      </ExpressionContainer>
+
       <ButtonContainer>
         <Button
           type={firstDice.disabled ? 'disabled' : 'secondary'}

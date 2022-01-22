@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import styled from 'styled-components';
 import Emoji from 'react-native-emoji';
 import { theme } from '../constants/Theme';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useGameData } from '../context/gameContext';
 
 export interface IMonsterCard {
   monster: string;
@@ -81,12 +80,6 @@ export const MonsterCard: FC<IMonsterCard> = ({ monster, animate }) => {
       }),
     ]).start();
   };
-
-  /* useEffect(() => {
-    if (killed) {
-      animation();
-    }
-  }); */
 
   if (animate) animation();
 

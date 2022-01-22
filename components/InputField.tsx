@@ -8,9 +8,7 @@ interface IInputFieldProps extends Partial<ViewStyle> {
   value: string;
   onChange?: (value: string) => void;
   onChangeEnd?: (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => void;
-  icon?: string;
   placeholder?: string;
-
   editable?: boolean;
   keyboardType?: string;
   classId?: boolean;
